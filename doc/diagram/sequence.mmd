@@ -1,0 +1,58 @@
+sequenceDiagram
+    autonumber
+    actor Etudiant
+    participant UI as Interface Web
+    participant API as API Flask
+    participant Model as Module IA
+    participant DB as Base de données
+    
+    Note over Etudiant,DB: Scénario: Conversation puis Préinscription
+    
+    %% Phase 1: Conversation
+    rect rgb(173, 216, 230)
+    Note over Etudiant,Model: Phase 1 - Conversation avec le chatbot
+    Etudiant->>+UI: Ouvre la page chat
+    UI-->>-Etudiant: Affiche interface chat
+    
+    Etudiant->>+UI: Envoie message<br/>"Comment s'inscrire?"
+    UI->>+API: POST /api/message<br/>{message, session_id}
+    API->>+DB: INSERT INTO messages<br/>(session_id, role='user', contenu)
+    DB-->>-API: Message enregistré
+    
+    API->>+Model: respond(message, session_id)
+    Model->>Model: Analyse NLP<br/>(tokenize, detect intent)
+    Model-->>-API: Réponse + intent
+    
+    API->>+DB: INSERT INTO messages<br/>(session_id, role='bot', contenu)
+    DB-->>-API: Réponse enregistrée
+    
+    API-->>-UI: {response, intent}
+    UI-->>-Etudiant: Affiche réponse du bot
+    end
+    
+    %% Phase 2: Préinscription
+    rect rgb(255, 200, 150)
+    Note over Etudiant,DB: Phase 2 - Préinscription
+    
+    alt Intent = "preinscription"
+        UI->>Etudiant: Propose formulaire<br/>de préinscription
+        Etudiant->>+UI: Clique "Se préinscrire"
+        UI-->>-Etudiant: Affiche formulaire
+        
+        Etudiant->>+UI: Remplit et soumet<br/>(nom, prénom, email, etc.)
+        UI->>UI: Validation côté client
+        
+        UI->>+API: POST /api/preinscription<br/>{nom, prenom, email, ...}
+        API->>API: Validation serveur
+        
+        API->>+DB: INSERT INTO preinscriptions<br/>(nom, prenom, email, programme, ...)
+        DB-->>-API: ID préinscription + confirmation
+        
+        API-->>-UI: {id, status: "saved"}
+        UI-->>-Etudiant: Confirmation succès<br/>"Préinscription enregistrée"
+    else Intent != "preinscription"
+        Note over Etudiant: Continue la conversation
+    end
+    end
+    
+    Note over Etudiant,DB: Fin du scénario

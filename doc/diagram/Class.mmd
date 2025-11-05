@@ -1,0 +1,144 @@
+classDiagram
+    %% Classes principales du backend
+    
+    class FlaskApp {
+        +app: Flask
+        +secret_key: String
+        +config: Dict
+        +init_app()
+        +run()
+    }
+    
+    class RouteHandler {
+        <<Service>>
+        +render_index()
+        +render_chat()
+        +render_preinscription()
+        +handle_message(request)
+        +handle_preinscription(request)
+        +get_preinscriptions()
+    }
+    
+    class MessageAPI {
+        <<Service>>
+        +process_message(message: String, session_id: String) Dict
+        +validate_input(data: Dict) bool
+        +format_response(response: String, intent: String) Dict
+    }
+    
+    class PreinscriptionAPI {
+        <<Service>>
+        +create_preinscription(data: Dict) int
+        +validate_form(data: Dict) bool
+        +get_all_preinscriptions() List
+        +get_preinscription_by_id(id: int) Dict
+    }
+    
+    class ChatbotModel {
+        +model_path: String
+        +nlp_processor: NLPUtils
+        +respond(message: String, session_id: String) Dict
+        +load_model()
+        +predict_intent(message: String) String
+    }
+    
+    class NLPUtils {
+        +tokenize(text: String) List~String~
+        +normalize(text: String) String
+        +detect_intent(tokens: List~String~) String
+        +extract_entities(text: String) Dict
+    }
+    
+    class DatabaseManager {
+        <<Service>>
+        -db_path: String
+        -connection: Connection
+        +connect() Connection
+        +close()
+        +execute_query(query: String, params: Tuple) Cursor
+        +commit()
+    }
+    
+    class PreinscriptionRepository {
+        -db_manager: DatabaseManager
+        +insert(preinscription: Preinscription) int
+        +find_all() List~Preinscription~
+        +find_by_id(id: int) Preinscription
+        +update(preinscription: Preinscription) bool
+        +delete(id: int) bool
+    }
+    
+    class MessageRepository {
+        -db_manager: DatabaseManager
+        +insert(message: Message) int
+        +find_by_session(session_id: String) List~Message~
+        +find_all() List~Message~
+    }
+    
+    class UserRepository {
+        -db_manager: DatabaseManager
+        +insert(user: User) int
+        +find_by_email(email: String) User
+        +find_by_id(id: int) User
+        +authenticate(username: String, password: String) bool
+    }
+    
+    class Preinscription {
+        +id: int
+        +nom: String
+        +prenom: String
+        +email: String
+        +telephone: String
+        +programme: String
+        +date_soumission: DateTime
+        +statut: String
+        +meta_json: String
+    }
+    
+    class Message {
+        +id: int
+        +session_id: String
+        +role: String
+        +contenu: String
+        +timestamp: DateTime
+    }
+    
+    class User {
+        +id: int
+        +username: String
+        +password_hash: String
+        +nom: String
+        +prenom: String
+        +email: String
+        +role: String
+    }
+    
+    %% Relations
+    FlaskApp --> RouteHandler : utilise
+    RouteHandler --> MessageAPI : appelle
+    RouteHandler --> PreinscriptionAPI : appelle
+    
+    MessageAPI --> ChatbotModel : utilise
+    MessageAPI --> MessageRepository : persiste
+    
+    ChatbotModel --> NLPUtils : utilise
+    
+    PreinscriptionAPI --> PreinscriptionRepository : utilise
+    
+    PreinscriptionRepository --> DatabaseManager : utilise
+    MessageRepository --> DatabaseManager : utilise
+    UserRepository --> DatabaseManager : utilise
+    
+    PreinscriptionRepository ..> Preinscription : crée
+    MessageRepository ..> Message : crée
+    UserRepository ..> User : crée
+    
+    %% Composition
+    MessageAPI *-- ChatbotModel
+    PreinscriptionAPI *-- PreinscriptionRepository
+    MessageAPI *-- MessageRepository
+    
+    %% Styling
+    style FlaskApp fill:#ff6b6b,stroke:#8b0000,stroke-width:4px
+    style ChatbotModel fill:#da70d6,stroke:#4b0082,stroke-width:3px
+    style DatabaseManager fill:#90ee90,stroke:#006400,stroke-width:3px

@@ -1,0 +1,72 @@
+flowchart TB
+    subgraph Routes["🌐 Routes Web (GET)"]
+        R1["GET /<br/>Page d'accueil"]
+        R2["GET /chat<br/>Interface de chat"]
+        R3["GET /preinscription<br/>Formulaire de préinscription"]
+    end
+    
+    subgraph API["🔌 API REST Endpoints"]
+        direction TB
+        
+        subgraph Message["💬 Gestion des Messages"]
+            API1["POST /api/message<br/>───────────────<br/>Envoyer un message au chatbot"]
+            API1Input["📥 Input:<br/>{<br/>  'message': string,<br/>  'session_id': string<br/>}"]
+            API1Output["📤 Output:<br/>{<br/>  'response': string,<br/>  'intent': string,<br/>  'entities': object<br/>}"]
+        end
+        
+        subgraph Preinscription["📝 Gestion des Préinscriptions"]
+            API2["POST /api/preinscription<br/>───────────────<br/>Soumettre une préinscription"]
+            API2Input["📥 Input:<br/>{<br/>  'nom': string,<br/>  'prenom': string,<br/>  'email': string,<br/>  'telephone': string,<br/>  'programme': string<br/>}"]
+            API2Output["📤 Output:<br/>{<br/>  'id': integer,<br/>  'status': 'saved'<br/>}"]
+            
+            API3["GET /api/preinscriptions<br/>───────────────<br/>Liste des préinscriptions<br/>(Admin uniquement)"]
+            API3Output["📤 Output:<br/>[{<br/>  'id': integer,<br/>  'nom': string,<br/>  'prenom': string,<br/>  'email': string,<br/>  'programme': string,<br/>  'date_soumission': datetime,<br/>  'statut': string<br/>}, ...]"]
+        end
+        
+        subgraph Session["🔐 Gestion de Session"]
+            API4["GET /api/session<br/>───────────────<br/>Obtenir info session"]
+            API4Output["📤 Output:<br/>{<br/>  'session_id': string,<br/>  'created_at': datetime<br/>}"]
+        end
+    end
+    
+    subgraph StatusCodes["📊 Codes HTTP"]
+        S200["✅ 200 OK<br/>Succès"]
+        S201["✅ 201 Created<br/>Ressource créée"]
+        S400["❌ 400 Bad Request<br/>Données invalides"]
+        S401["❌ 401 Unauthorized<br/>Non authentifié"]
+        S404["❌ 404 Not Found<br/>Ressource introuvable"]
+        S500["❌ 500 Internal Error<br/>Erreur serveur"]
+    end
+    
+    API1 -.->|utilise| API1Input
+    API1 -.->|retourne| API1Output
+    API2 -.->|utilise| API2Input
+    API2 -.->|retourne| API2Output
+    API3 -.->|retourne| API3Output
+    API4 -.->|retourne| API4Output
+    
+    API1 --> S200
+    API2 --> S201
+    API3 --> S200
+    API1 & API2 --> S400
+    API3 --> S401
+    API1 & API2 & API3 & API4 --> S500
+    
+    style Routes fill:#87ceeb,stroke:#00008b,stroke-width:3px
+    style API fill:#ffb84d,stroke:#d84315,stroke-width:3px
+    style Message fill:#90ee90,stroke:#006400,stroke-width:3px
+    style Preinscription fill:#ff6b9d,stroke:#8b0000,stroke-width:3px
+    style Session fill:#b19cd9,stroke:#4b0082,stroke-width:3px
+    style StatusCodes fill:#ffd700,stroke:#b8860b,stroke-width:3px
+    
+    style API1 fill:#98fb98,stroke:#006400,stroke-width:2px
+    style API2 fill:#ff6347,stroke:#8b0000,stroke-width:2px
+    style API3 fill:#87cefa,stroke:#00008b,stroke-width:2px
+    style API4 fill:#da70d6,stroke:#4b0082,stroke-width:2px
+    
+    style S200 fill:#32cd32,stroke:#006400,stroke-width:2px
+    style S201 fill:#32cd32,stroke:#006400,stroke-width:2px
+    style S400 fill:#ff4500,stroke:#8b0000,stroke-width:2px
+    style S401 fill:#ff4500,stroke:#8b0000,stroke-width:2px
+    style S404 fill:#ff4500,stroke:#8b0000,stroke-width:2px
+    style S500 fill:#ff4500,stroke:#8b0000,stroke-width:2px

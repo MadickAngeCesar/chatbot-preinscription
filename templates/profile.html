@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil - Chatbot Préinscription</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .profile-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header-content {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #667eea;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-info h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .profile-info p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin: 5px 0;
+        }
+
+        .profile-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .profile-card h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-card h2 i {
+            color: #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group input:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background: #e8e8e8;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .preinscriptions-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .preinscription-item {
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            background: #f9f9f9;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .preinscription-item h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .preinscription-item p {
+            font-size: 14px;
+            color: #777;
+            margin: 3px 0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-nouveau { background: #2196F3; color: white; }
+        .status-en_cours { background: #FF9800; color: white; }
+        .status-validé { background: #4CAF50; color: white; }
+        .status-rejeté { background: #F44336; color: white; }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+
+        .navbar {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .navbar-menu a {
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-menu a:hover {
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .profile-header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="{{ url_for('index') }}" class="navbar-brand">
+                <i class="fas fa-graduation-cap"></i> Préinscription
+            </a>
+            <div class="navbar-menu">
+                <a href="{{ url_for('chat') }}"><i class="fas fa-comments"></i> Chatbot</a>
+                <a href="{{ url_for('preinscription') }}"><i class="fas fa-file-alt"></i> Préinscription</a>
+                <a href="{{ url_for('profile') }}" class="active"><i class="fas fa-user"></i> Profil</a>
+                <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        <!-- Alert -->
+        <div id="alert" class="alert"></div>
+
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-header-content">
+                <div class="profile-avatar" id="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-info">
+                    <h1 id="userName">Chargement...</h1>
+                    <p><i class="fas fa-envelope"></i> <span id="userEmail"></span></p>
+                    <p><i class="fas fa-phone"></i> <span id="userPhone"></span></p>
+                    <span class="profile-badge" id="userRole">Étudiant</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="profile-card">
+            <h2><i class="fas fa-chart-bar"></i> Mes Statistiques</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalPreinscriptions">0</div>
+                    <div class="stat-label">Préinscriptions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="enCoursCount">0</div>
+                    <div class="stat-label">En Cours</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="valideCount">0</div>
+                    <div class="stat-label">Validées</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="profile-grid">
+            <!-- Update Profile -->
+            <div class="profile-card">
+                <h2><i class="fas fa-user-edit"></i> Modifier mes informations</h2>
+                <form id="updateProfileForm">
+                    <div class="form-group">
+                        <label>Nom</label>
+                        <input type="text" id="nom" name="nom" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Prénom</label>
+                        <input type="text" id="prenom" name="prenom" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Téléphone</label>
+                        <input type="tel" id="telephone" name="telephone">
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                </form>
+            </div>
+
+            <!-- Change Password -->
+            <div class="profile-card">
+                <h2><i class="fas fa-lock"></i> Changer mon mot de passe</h2>
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label>Mot de passe actuel</label>
+                        <input type="password" id="currentPassword" name="current_password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nouveau mot de passe</label>
+                        <input type="password" id="newPassword" name="new_password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmer le mot de passe</label>
+                        <input type="password" id="confirmPassword" name="confirm_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-key"></i> Modifier
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Preinscriptions List -->
+        <div class="profile-card">
+            <h2><i class="fas fa-list"></i> Mes Préinscriptions</h2>
+            <div class="preinscriptions-list" id="preinscriptionsList">
+                <p style="text-align: center; color: #777;">Chargement...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userProfile = null;
+
+        // Charger le profil au chargement de la page
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
+        });
+
+        // Charger le profil
+        async function loadProfile() {
+            try {
+                const response = await fetch('/api/auth/profile');
+                const data = await response.json();
+
+                if (data.success) {
+                    userProfile = data.user;
+                    displayProfile(userProfile);
+                    loadPreinscriptions();
+                } else {
+                    showAlert('Erreur lors du chargement du profil', 'error');
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                showAlert('Erreur de connexion', 'error');
+            }
+        }
+
+        // Afficher le profil
+        function displayProfile(user) {
+            // Avatar avec initiales
+            const initials = (user.nom.charAt(0) + user.prenom.charAt(0)).toUpperCase();
+            document.getElementById('avatar').textContent = initials;
+
+            // Informations
+            document.getElementById('userName').textContent = `${user.prenom} ${user.nom}`;
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('userPhone').textContent = user.telephone || 'Non renseigné';
+            document.getElementById('userRole').textContent = getRoleLabel(user.role);
+
+            // Formulaire
+            document.getElementById('nom').value = user.nom;
+            document.getElementById('prenom').value = user.prenom;
+            document.getElementById('email').value = user.email;
+            document.getElementById('telephone').value = user.telephone || '';
+
+            // Statistiques
+            document.getElementById('totalPreinscriptions').textContent = user.stats.total_preinscriptions;
+            document.getElementById('enCoursCount').textContent = user.stats.en_cours || 0;
+            document.getElementById('valideCount').textContent = user.stats.valide || 0;
+        }
+
+        // Charger les préinscriptions
+        async function loadPreinscriptions() {
+            try {
+                const response = await fetch(`/api/preinscriptions?user_id=${userProfile.id}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    displayPreinscriptions(data.preinscriptions);
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+            }
+        }
+
+        // Afficher les préinscriptions
+        function displayPreinscriptions(preinscriptions) {
+            const container = document.getElementById('preinscriptionsList');
+
+            if (preinscriptions.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #777;">Aucune préinscription trouvée</p>';
+                return;
+            }
+
+            container.innerHTML = preinscriptions.map(p => `
+                <div class="preinscription-item">
+                    <h3>${p.filiere_nom} - ${p.niveau}</h3>
+                    <p><strong>Établissement:</strong> ${p.etablissement_nom}</p>
+                    <p><strong>Date:</strong> ${formatDate(p.date_soumission)}</p>
+                    <p><span class="status-badge status-${p.statut}">${getStatusLabel(p.statut)}</span></p>
+                </div>
+            `).join('');
+        }
+
+        // Mettre à jour le profil
+        document.getElementById('updateProfileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                nom: document.getElementById('nom').value,
+                prenom: document.getElementById('prenom').value,
+                telephone: document.getElementById('telephone').value
+            };
+
+            try {
+                const response = await fetch('/api/auth/profile', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('Profil mis à jour avec succès !', 'success');
+                    await loadProfile();
+                } else {
+                    showAlert(data.error || 'Erreur lors de la mise à jour', 'error');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                showAlert('Erreur de connexion', 'error');
+            }
+        });
+
+        // Changer le mot de passe
+        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                showAlert('Les mots de passe ne correspondent pas', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/change-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        current_password: currentPassword,
+                        new_password: newPassword,
+                        confirm_password: confirmPassword
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('Mot de passe modifié avec succès !', 'success');
+                    document.getElementById('changePasswordForm').reset();
+                } else {
+                    showAlert(data.error || 'Erreur lors du changement de mot de passe', 'error');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                showAlert('Erreur de connexion', 'error');
+            }
+        });
+
+        // Déconnexion
+        async function logout() {
+            try {
+                const response = await fetch('/api/auth/logout', { method: 'POST' });
+                const data = await response.json();
+
+                if (data.success) {
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                window.location.href = '/login';
+            }
+        }
+
+        // Afficher une alerte
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 5000);
+        }
+
+        // Obtenir le label du rôle
+        function getRoleLabel(role) {
+            const labels = {
+                'admin': 'Administrateur',
+                'etudiant': 'Étudiant',
+                'visiteur': 'Visiteur'
+            };
+            return labels[role] || role;
+        }
+
+        // Obtenir le label du statut
+        function getStatusLabel(statut) {
+            const labels = {
+                'nouveau': 'Nouveau',
+                'en_cours': 'En Cours',
+                'validé': 'Validé',
+                'rejeté': 'Rejeté'
+            };
+            return labels[statut] || statut;
+        }
+
+        // Formater la date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('fr-FR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+    </script>
+</body>
+</html>

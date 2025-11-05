@@ -1,0 +1,78 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1440" height="900" fill="#F9FAFB"/>
+  
+  <!-- Sidebar -->
+  <rect width="280" height="900" fill="white"/>
+  <rect x="280" width="1" height="900" fill="#E5E7EB"/>
+  
+  <!-- Sidebar Header -->
+  <g id="sidebar-header">
+    <circle cx="40" cy="40" r="16" fill="#6366F1"/>
+    <text x="65" y="48" font-family="Inter" font-weight="700" font-size="18" fill="#111827">ICT University</text>
+  </g>
+  
+  <!-- New Chat Button -->
+  <rect x="20" y="100" width="240" height="48" rx="8" fill="#6366F1"/>
+  <text x="140" y="128" font-family="Inter" font-weight="600" font-size="14" fill="white" text-anchor="middle">+ Nouvelle conversation</text>
+  
+  <!-- Chat History -->
+  <text x="20" y="180" font-family="Inter" font-weight="600" font-size="12" fill="#9CA3AF">HISTORIQUE</text>
+  <rect x="20" y="200" width="240" height="40" rx="6" fill="#F3F4F6"/>
+  <text x="30" y="224" font-family="Inter" font-size="13" fill="#4B5563">Quels sont les programmes...</text>
+  
+  <rect x="20" y="250" width="240" height="40" rx="6" fill="#EEF2FF"/>
+  <text x="30" y="274" font-family="Inter" font-size="13" fill="#6366F1">Documents nécessaires</text>
+  
+  <!-- Main Chat Area -->
+  <g id="chat-main">
+    <!-- Header -->
+    <rect x="280" width="1160" height="80" fill="white"/>
+    <rect x="280" y="80" width="1160" height="1" fill="#E5E7EB"/>
+    
+    <!-- Bot Avatar in Header -->
+    <circle cx="320" cy="40" r="24" fill="#EEF2FF"/>
+    <text x="320" y="48" font-family="Inter" font-size="20" fill="#6366F1" text-anchor="middle">🤖</text>
+    
+    <!-- Bot Info -->
+    <text x="355" y="37" font-family="Inter" font-weight="600" font-size="16" fill="#111827">Assistant de Préinscription</text>
+    <text x="355" y="53" font-family="Inter" font-size="13" fill="#9CA3AF">En ligne - Prêt à vous aider</text>
+    
+    <!-- Welcome Message -->
+    <g id="welcome" transform="translate(720, 300)">
+      <circle r="40" fill="#EEF2FF"/>
+      <text y="10" font-size="32" text-anchor="middle">🤖</text>
+      <text y="80" font-family="Inter" font-weight="700" font-size="24" fill="#111827" text-anchor="middle">Bienvenue chez ICT University ! 👋</text>
+      <text y="110" font-family="Inter" font-size="16" fill="#6B7280" text-anchor="middle">Je suis votre assistant virtuel. Comment puis-je vous aider ?</text>
+    </g>
+    
+    <!-- Quick Action Cards -->
+    <g id="quick-actions" transform="translate(480, 450)">
+      <!-- Card 1 -->
+      <rect width="180" height="120" rx="12" fill="white" stroke="#E5E7EB" stroke-width="1"/>
+      <text x="90" y="40" font-size="28" text-anchor="middle">📚</text>
+      <text x="90" y="70" font-family="Inter" font-weight="600" font-size="13" fill="#111827" text-anchor="middle">Programmes</text>
+      <text x="90" y="88" font-family="Inter" font-size="13" fill="#111827" text-anchor="middle">disponibles</text>
+      
+      <!-- Card 2 -->
+      <rect x="200" width="180" height="120" rx="12" fill="white" stroke="#E5E7EB" stroke-width="1"/>
+      <text x="290" y="40" font-size="28" text-anchor="middle">📄</text>
+      <text x="290" y="70" font-family="Inter" font-weight="600" font-size="13" fill="#111827" text-anchor="middle">Documents</text>
+      <text x="290" y="88" font-family="Inter" font-size="13" fill="#111827" text-anchor="middle">requis</text>
+      
+      <!-- Card 3 -->
+      <rect x="400" width="180" height="120" rx="12" fill="white" stroke="#E5E7EB" stroke-width="1"/>
+      <text x="490" y="40" font-size="28" text-anchor="middle">💰</text>
+      <text x="490" y="70" font-family="Inter" font-weight="600" font-size="13" fill="#111827" text-anchor="middle">Frais de</text>
+      <text x="490" y="88" font-family="Inter" font-size="13" fill="#111827" text-anchor="middle">scolarité</text>
+    </g>
+    
+    <!-- Input Area -->
+    <rect x="320" y="820" width="1080" height="60" rx="16" fill="#F3F4F6" stroke="#E5E7EB" stroke-width="2"/>
+    <text x="360" y="855" font-family="Inter" font-size="14" fill="#9CA3AF">Posez votre question...</text>
+    
+    <!-- Send Button -->
+    <circle cx="1360" cy="850" r="20" fill="#6366F1"/>
+    <text x="1360" y="857" font-size="16" fill="white" text-anchor="middle">✈️</text>
+  </g>
+</svg>

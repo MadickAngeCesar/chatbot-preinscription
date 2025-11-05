@@ -1,0 +1,340 @@
+{
+  "info": {
+    "name": "Chatbot Préinscription API",
+    "description": "Collection complète pour tester l'API du Chatbot de Préinscription Universitaire",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:5000/api",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Get API Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Vérifie l'état de santé de l'API et de la base de données"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Établissements",
+      "item": [
+        {
+          "name": "Liste des établissements",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/etablissements?page=1&per_page=20",
+              "host": ["{{base_url}}"],
+              "path": ["etablissements"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "per_page", "value": "20"},
+                {"key": "actif", "value": "1", "disabled": true},
+                {"key": "type", "value": "université", "disabled": true},
+                {"key": "ville", "value": "Yaoundé", "disabled": true}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Détails établissement",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/etablissements/1",
+              "host": ["{{base_url}}"],
+              "path": ["etablissements", "1"]
+            }
+          }
+        },
+        {
+          "name": "Établissements par type",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/etablissements?type=université",
+              "host": ["{{base_url}}"],
+              "path": ["etablissements"],
+              "query": [
+                {"key": "type", "value": "université"}
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Filières",
+      "item": [
+        {
+          "name": "Liste des filières",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/filieres?page=1&per_page=20",
+              "host": ["{{base_url}}"],
+              "path": ["filieres"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "per_page", "value": "20"},
+                {"key": "etablissement_id", "value": "1", "disabled": true},
+                {"key": "niveau", "value": "Master", "disabled": true},
+                {"key": "departement", "value": "Informatique", "disabled": true},
+                {"key": "disponible", "value": "1", "disabled": true}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Détails filière",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/filieres/1",
+              "host": ["{{base_url}}"],
+              "path": ["filieres", "1"]
+            }
+          }
+        },
+        {
+          "name": "Filières Master",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/filieres?niveau=Master",
+              "host": ["{{base_url}}"],
+              "path": ["filieres"],
+              "query": [
+                {"key": "niveau", "value": "Master"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filières disponibles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/filieres?disponible=1",
+              "host": ["{{base_url}}"],
+              "path": ["filieres"],
+              "query": [
+                {"key": "disponible", "value": "1"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filières par établissement",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/filieres?etablissement_id=1",
+              "host": ["{{base_url}}"],
+              "path": ["filieres"],
+              "query": [
+                {"key": "etablissement_id", "value": "1"}
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Préinscriptions",
+      "item": [
+        {
+          "name": "Liste des préinscriptions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/preinscriptions?page=1&per_page=20",
+              "host": ["{{base_url}}"],
+              "path": ["preinscriptions"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "per_page", "value": "20"},
+                {"key": "etablissement_id", "value": "1", "disabled": true},
+                {"key": "filiere_id", "value": "1", "disabled": true},
+                {"key": "statut", "value": "nouveau", "disabled": true},
+                {"key": "email", "value": "test@", "disabled": true}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Détails préinscription",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/preinscriptions/1",
+              "host": ["{{base_url}}"],
+              "path": ["preinscriptions", "1"]
+            }
+          }
+        },
+        {
+          "name": "Préinscriptions nouvelles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/preinscriptions?statut=nouveau",
+              "host": ["{{base_url}}"],
+              "path": ["preinscriptions"],
+              "query": [
+                {"key": "statut", "value": "nouveau"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mettre à jour statut",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"statut\": \"en_cours\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/preinscriptions/1/statut",
+              "host": ["{{base_url}}"],
+              "path": ["preinscriptions", "1", "statut"]
+            },
+            "description": "Valeurs acceptées: nouveau, en_cours, validé, rejeté"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Statistiques",
+      "item": [
+        {
+          "name": "Tableau de bord",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/stats/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["stats", "dashboard"]
+            },
+            "description": "Récupère toutes les statistiques pour le tableau de bord"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Recherche",
+      "item": [
+        {
+          "name": "Recherche globale",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/search?q=informatique",
+              "host": ["{{base_url}}"],
+              "path": ["search"],
+              "query": [
+                {"key": "q", "value": "informatique"},
+                {"key": "type", "value": "all", "disabled": true}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Recherche établissements",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/search?q=ICT&type=etablissements",
+              "host": ["{{base_url}}"],
+              "path": ["search"],
+              "query": [
+                {"key": "q", "value": "ICT"},
+                {"key": "type", "value": "etablissements"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Recherche filières",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/search?q=master&type=filieres",
+              "host": ["{{base_url}}"],
+              "path": ["search"],
+              "query": [
+                {"key": "q", "value": "master"},
+                {"key": "type", "value": "filieres"}
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Validation",
+      "item": [
+        {
+          "name": "Valider email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/validate/email",
+              "host": ["{{base_url}}"],
+              "path": ["validate", "email"]
+            },
+            "description": "Vérifie si un email est déjà utilisé dans les préinscriptions"
+          }
+        }
+      ]
+    }
+  ]
+}

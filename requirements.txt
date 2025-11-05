@@ -1,1 +1,18 @@
-flask
+# Flask et extensions
+Flask==3.0.0
+Flask-CORS==4.0.0
+
+# Base de données
+sqlite3
+
+# Requêtes HTTP (pour les tests)
+requests==2.31.0
+
+# Sécurité et utilitaires
+Werkzeug==3.0.1
+
+# Pour le développement (optionnel)
+python-dotenv==1.0.0
+
+# Google Gemini AI
+google-generativeai==0.3.2

@@ -1,0 +1,221 @@
+sequenceDiagram
+    autonumber
+    
+    box Visiteur / Étudiant
+    actor User as Utilisateur
+    end
+    
+    box Système Frontend
+    participant LP as Page Login
+    participant RP as Page Register
+    participant PP as Page Profil
+    participant CP as Page Chat
+    end
+    
+    box API Backend
+    participant Auth as Auth API
+    participant Main as Main API
+    end
+    
+    box Base de Données
+    participant DB as SQLite DB
+    end
+    
+    %% === INSCRIPTION ===
+    rect rgb(220, 240, 255)
+    Note over User,DB: 📝 Flux d'Inscription
+    
+    User->>RP: Accède à /register
+    RP-->>User: Affiche formulaire inscription
+    
+    User->>RP: Remplit formulaire<br/>(validation temps réel)
+    RP->>RP: Vérifie force mot de passe<br/>(8 chars, maj, min, chiffre)
+    RP->>RP: Affiche checklist exigences
+    
+    User->>RP: Clique "S'inscrire"
+    RP->>+Auth: POST /api/auth/register<br/>{nom, prenom, email, password}
+    
+    Auth->>Auth: Valide email (regex)
+    Auth->>Auth: Vérifie doublon email
+    Auth->>DB: SELECT email FROM users
+    DB-->>Auth: Email libre
+    
+    Auth->>Auth: Valide force mot de passe
+    Auth->>Auth: Hache mot de passe (SHA-256)
+    
+    Auth->>DB: INSERT INTO users<br/>(nom, prenom, email, password_hash)
+    DB-->>Auth: user_id créé
+    
+    Auth-->>-RP: {success: true, message}
+    RP->>LP: Redirect /login?registered=true
+    LP-->>User: Affiche "Compte créé avec succès"
+    end
+    
+    %% === CONNEXION ===
+    rect rgb(255, 240, 220)
+    Note over User,DB: 🔐 Flux de Connexion
+    
+    User->>LP: Accède à /login
+    LP-->>User: Affiche formulaire connexion
+    
+    User->>LP: Entre email/password
+    User->>LP: Clique "Se connecter"
+    
+    LP->>LP: Affiche spinner chargement
+    LP->>+Auth: POST /api/auth/login<br/>{email, password}
+    
+    Auth->>DB: SELECT * FROM users<br/>WHERE email = ?
+    DB-->>Auth: Données utilisateur
+    
+    Auth->>Auth: Compare password_hash<br/>(SHA-256)
+    
+    alt Identifiants valides
+        Auth->>Auth: Crée session<br/>(user_id, email, role, nom, prenom)
+        Auth->>Auth: Configure durée 24h
+        Auth-->>-LP: {success: true, user, role}
+        
+        alt Rôle = admin
+            LP->>User: Redirect /admin/dashboard
+        else Rôle = etudiant/visiteur
+            LP->>User: Redirect /chat
+        end
+    else Identifiants invalides
+        Auth-->>LP: {success: false, error}
+        LP->>LP: Affiche alerte erreur
+        LP-->>User: "Email ou mot de passe incorrect"
+    end
+    end
+    
+    %% === ACCÈS PAGE PROTÉGÉE ===
+    rect rgb(240, 255, 240)
+    Note over User,DB: 🛡️ Accès Page Protégée (Chat)
+    
+    User->>CP: Accède à /chat
+    CP->>CP: Vérifie session['user_id']
+    
+    alt Utilisateur authentifié
+        CP->>+Auth: GET /api/auth/check
+        Auth->>Auth: Vérifie session active
+        Auth-->>-CP: {authenticated: true, user}
+        CP-->>User: Affiche interface chat
+    else Non authentifié
+        CP->>LP: Redirect /login
+        LP-->>User: "Veuillez vous connecter"
+    end
+    end
+    
+    %% === PRÉINSCRIPTION ===
+    rect rgb(255, 240, 255)
+    Note over User,DB: 📋 Soumission Préinscription
+    
+    User->>CP: Remplit formulaire préinscription
+    User->>CP: Clique "Soumettre"
+    
+    CP->>+Main: POST /api/preinscription<br/>{données formulaire}
+    
+    Main->>Main: Vérifie session['user_id']
+    
+    alt Authentifié
+        Main->>Main: Récupère user_id session
+        Main->>DB: INSERT INTO preinscriptions<br/>(user_id, etablissement_id, ...)
+        DB-->>Main: preinscription_id
+        Main-->>-CP: {success: true, id}
+        CP-->>User: "Préinscription enregistrée !"
+    else Non authentifié
+        Main-->>CP: {success: false, error: 401}
+        CP->>LP: Redirect /login
+    end
+    end
+    
+    %% === GESTION PROFIL ===
+    rect rgb(250, 250, 220)
+    Note over User,DB: 👤 Gestion du Profil
+    
+    User->>PP: Accède à /profile
+    PP->>PP: Vérifie session['user_id']
+    
+    PP->>+Auth: GET /api/auth/profile
+    Auth->>DB: SELECT users.*, COUNT(preinscriptions)<br/>FROM users LEFT JOIN preinscriptions
+    DB-->>Auth: Données profil + stats
+    Auth-->>-PP: {user, stats}
+    
+    PP->>PP: Affiche avatar (initiales)
+    PP->>PP: Affiche statistiques
+    PP->>PP: Remplit formulaire
+    PP-->>User: Interface profil complète
+    
+    User->>PP: Modifie nom/prenom/telephone
+    User->>PP: Clique "Enregistrer"
+    
+    PP->>+Auth: PUT /api/auth/profile<br/>{nom, prenom, telephone}
+    Auth->>DB: UPDATE users SET...<br/>WHERE id = user_id
+    DB-->>Auth: OK
+    Auth->>Auth: Met à jour session
+    Auth-->>-PP: {success: true}
+    PP-->>User: "Profil mis à jour !"
+    end
+    
+    %% === CHANGEMENT MOT DE PASSE ===
+    rect rgb(255, 230, 230)
+    Note over User,DB: 🔑 Changement Mot de Passe
+    
+    User->>PP: Entre mots de passe<br/>(actuel, nouveau, confirmation)
+    User->>PP: Clique "Modifier"
+    
+    PP->>PP: Vérifie nouveau === confirmation
+    
+    PP->>+Auth: POST /api/auth/change-password<br/>{current, new, confirm}
+    
+    Auth->>DB: SELECT password_hash<br/>WHERE id = user_id
+    DB-->>Auth: password_hash actuel
+    
+    Auth->>Auth: Vérifie mot de passe actuel
+    
+    alt Mot de passe correct
+        Auth->>Auth: Valide force nouveau<br/>(8 chars, maj, min, chiffre)
+        Auth->>Auth: Hache nouveau mot de passe
+        Auth->>DB: UPDATE users<br/>SET password_hash = ?
+        DB-->>Auth: OK
+        Auth-->>-PP: {success: true}
+        PP->>PP: Reset formulaire
+        PP-->>User: "Mot de passe modifié !"
+    else Mot de passe incorrect
+        Auth-->>PP: {success: false, error}
+        PP-->>User: "Mot de passe actuel incorrect"
+    end
+    end
+    
+    %% === ADMIN - GESTION UTILISATEURS ===
+    rect rgb(230, 230, 255)
+    Note over User,DB: 👨‍💼 Admin - Gestion Utilisateurs
+    
+    User->>Auth: GET /api/auth/users<br/>(Header: session admin)
+    
+    Auth->>Auth: Vérifie @admin_required
+    Auth->>Auth: Vérifie role === 'admin'
+    
+    alt Est admin
+        Auth->>DB: SELECT * FROM users<br/>LIMIT/OFFSET (pagination)
+        DB-->>Auth: Liste utilisateurs
+        Auth-->>User: {users: [...], total, pages}
+    else N'est pas admin
+        Auth-->>User: {error: "Accès refusé", code: 403}
+    end
+    
+    User->>Auth: PUT /api/auth/users/123/role<br/>{role: "etudiant"}
+    Auth->>Auth: Vérifie @admin_required
+    Auth->>DB: UPDATE users<br/>SET role = ? WHERE id = ?
+    DB-->>Auth: OK
+    Auth-->>User: {success: true}
+    end
+    
+    %% === DÉCONNEXION ===
+    rect rgb(240, 240, 240)
+    Note over User,DB: 🚪 Déconnexion
+    
+    User->>Auth: POST /api/auth/logout
+    Auth->>Auth: session.clear()
+    Auth-->>User: {success: true}
+    User->>LP: Redirect /login
+    LP-->>User: "Déconnexion réussie"
+    end

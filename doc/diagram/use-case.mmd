@@ -1,0 +1,34 @@
+flowchart TB
+    subgraph Système["🎓 Système Chatbot Préinscription"]
+        UC1["💬 Converser avec<br/>le chatbot"]
+        UC2["📝 Se préinscrire"]
+        UC3["📋 Consulter les<br/>préinscriptions"]
+        UC4["🔍 Consulter les logs<br/>de conversation"]
+        UC5["ℹ️ Obtenir informations<br/>sur les programmes"]
+        UC6["📄 Obtenir informations<br/>sur les documents requis"]
+    end
+    
+    Etudiant["👤 Étudiant"]
+    Admin["👔 Administrateur"]
+    
+    Etudiant -->|Utilise| UC1
+    Etudiant -->|Soumet| UC2
+    Etudiant -->|Consulte| UC5
+    Etudiant -->|Consulte| UC6
+    
+    Admin -->|Accède| UC3
+    Admin -->|Consulte| UC4
+    
+    UC1 -.->|"<< include >>"| UC5
+    UC1 -.->|"<< include >>"| UC6
+    UC1 -.->|"<< extend >>"| UC2
+    
+    style Système fill:#d3d3d3,stroke:#000,stroke-width:4px
+    style Etudiant fill:#87ceeb,stroke:#00008b,stroke-width:3px
+    style Admin fill:#ffa07a,stroke:#8b0000,stroke-width:3px
+    style UC1 fill:#90ee90,stroke:#006400,stroke-width:3px
+    style UC2 fill:#ff6347,stroke:#8b0000,stroke-width:3px
+    style UC3 fill:#87cefa,stroke:#00008b,stroke-width:3px
+    style UC4 fill:#87cefa,stroke:#00008b,stroke-width:3px
+    style UC5 fill:#ffd700,stroke:#b8860b,stroke-width:2px
+    style UC6 fill:#ffd700,stroke:#b8860b,stroke-width:2px

@@ -1,0 +1,95 @@
+erDiagram
+    ETABLISSEMENTS {
+        int id PK "Identifiant unique"
+        string nom "Nom de l'établissement"
+        string code "Code de l'établissement"
+        string adresse "Adresse complète"
+        string ville "Ville"
+        string telephone "Téléphone principal"
+        string email "Email de contact"
+        string site_web "Site web"
+        string type "Type (université, école, institut)"
+        boolean actif "Établissement actif"
+        datetime date_creation "Date de création"
+    }
+    
+    FILIERES {
+        int id PK "Identifiant unique"
+        int etablissement_id FK "Référence établissement"
+        string nom "Nom de la filière"
+        string code "Code de la filière"
+        string niveau "Niveau (Licence, Master, Doctorat)"
+        string departement "Département"
+        int duree "Durée en années"
+        decimal frais_inscription "Frais d'inscription"
+        decimal frais_scolarite "Frais de scolarité annuels"
+        int places_disponibles "Nombre de places"
+        text description "Description de la filière"
+        text prerequis "Prérequis académiques"
+        boolean actif "Filière active"
+        datetime date_ouverture "Date d'ouverture"
+        datetime date_fermeture "Date de fermeture inscription"
+    }
+    
+    PREINSCRIPTIONS {
+        int id PK "Identifiant unique"
+        int user_id FK "Référence utilisateur"
+        int etablissement_id FK "Référence établissement"
+        int filiere_id FK "Référence filière"
+        string nom "Nom de l'étudiant"
+        string prenom "Prénom de l'étudiant"
+        string email "Email de contact"
+        string telephone "Numéro de téléphone"
+        string date_naissance "Date de naissance"
+        string lieu_naissance "Lieu de naissance"
+        string adresse "Adresse complète"
+        string niveau "Niveau demandé"
+        text motivation "Lettre de motivation"
+        string photo_path "Chemin photo"
+        string diplome_path "Chemin diplôme"
+        string releve_path "Chemin relevé de notes"
+        string cv_path "Chemin CV"
+        string statut "Statut (nouveau, en_cours, validé, rejeté)"
+        boolean accept_terms "Acceptation des conditions"
+        boolean newsletter "Abonnement newsletter"
+        datetime date_soumission "Date de soumission"
+        text meta_json "Métadonnées additionnelles (JSON)"
+    }
+    
+    MESSAGES {
+        int id PK "Identifiant unique"
+        int user_id FK "Référence utilisateur (optionnel)"
+        string session_id "ID de session utilisateur"
+        string role "Role: user ou bot"
+        text contenu "Contenu du message"
+        datetime timestamp "Date/heure du message"
+        text metadata "Métadonnées (JSON)"
+    }
+    
+    CHAT_SESSIONS {
+        int id PK "Identifiant unique"
+        string session_id UK "ID de session unique"
+        int user_id FK "Référence utilisateur (optionnel)"
+        datetime created_at "Date de création"
+        datetime last_activity "Dernière activité"
+        text metadata "Métadonnées (JSON)"
+    }
+    
+    USERS {
+        int id PK "Identifiant unique"
+        string nom "Nom complet"
+        string prenom "Prénom"
+        string email UK "Email unique"
+        string telephone "Numéro de téléphone"
+        string password_hash "Mot de passe haché (pour admin)"
+        string role "Role: admin, etudiant, visiteur"
+        datetime created_at "Date de création"
+    }
+    
+    ETABLISSEMENTS ||--o{ FILIERES : "propose"
+    ETABLISSEMENTS ||--o{ PREINSCRIPTIONS : "reçoit"
+    FILIERES ||--o{ PREINSCRIPTIONS : "concerne"
+    USERS ||--o{ PREINSCRIPTIONS : "soumet"
+    USERS ||--o{ MESSAGES : "envoie"
+    USERS ||--o{ CHAT_SESSIONS : "crée"
+    CHAT_SESSIONS ||--o{ MESSAGES : "contient"

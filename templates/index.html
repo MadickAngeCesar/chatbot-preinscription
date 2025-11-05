@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chatbot de préinscription universitaire - Assistez votre inscription en ligne">
+    <title>Chatbot Préinscription | ICT University</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="landing-page">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>ICT University</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#features">Fonctionnalités</a></li>
+                    <li><a href="#how-it-works">Comment ça marche</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="{{ url_for('login') }}" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-sign-in-alt"></i> Connexion
+                    </a>
+                    <a href="{{ url_for('register') }}" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i> S'inscrire
+                    </a>
+                </div>
+                <button class="mobile-menu-toggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background">
+            <div class="hero-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="badge">
+                        <i class="fas fa-sparkles"></i>
+                        Propulsé par IA
+                    </div>
+                    <h1 class="hero-title">
+                        Simplifiez votre <span class="gradient-text">préinscription</span> universitaire
+                    </h1>
+                    <p class="hero-description">
+                        Notre assistant intelligent est là pour vous guider à chaque étape de votre préinscription. 
+                        Posez vos questions, obtenez des réponses instantanées et complétez votre inscription en toute simplicité.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus"></i>
+                            Créer un compte
+                        </a>
+                        <a href="{{ url_for('login') }}" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Se connecter
+                        </a>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px; font-size: 14px; opacity: 0.8;">
+                        Déjà inscrit ? <a href="{{ url_for('chat') }}" style="color: #667eea; text-decoration: underline;">Accéder au chatbot</a>
+                    </p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">2.5k+</div>
+                            <div class="stat-label">Étudiants inscrits</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">95%</div>
+                            <div class="stat-label">Satisfaction</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">24/7</div>
+                            <div class="stat-label">Disponibilité</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="chatbot-preview">
+                        <div class="preview-window">
+                            <div class="preview-header">
+                                <div class="preview-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                            <div class="preview-chat">
+                                <div class="preview-message bot-message animate-slide-in">
+                                    <div class="message-avatar">
+                                        <i class="fas fa-robot"></i>
+                                    </div>
+                                    <div class="message-bubble">
+                                        Bonjour ! Comment puis-je vous aider aujourd'hui ?
+                                    </div>
+                                </div>
+                                <div class="preview-message user-message animate-slide-in" style="animation-delay: 0.5s;">
+                                    <div class="message-bubble">
+                                        Quels sont les programmes disponibles ?
+                                    </div>
+                                </div>
+                                <div class="preview-message bot-message animate-slide-in" style="animation-delay: 1s;">
+                                    <div class="message-avatar">
+                                        <i class="fas fa-robot"></i>
+                                    </div>
+                                    <div class="message-bubble">
+                                        Nous proposons plusieurs programmes : Informatique, IA/ML, IoT, Cybersécurité...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="preview-glow"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Pourquoi choisir notre chatbot ?</h2>
+                <p class="section-description">
+                    Une expérience de préinscription moderne, rapide et personnalisée
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Intelligence Artificielle</h3>
+                    <p>Notre IA comprend vos questions et fournit des réponses précises et contextuelles en temps réel.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Disponible 24/7</h3>
+                    <p>Obtenez de l'aide à tout moment, jour et nuit. Notre assistant ne dort jamais.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Sécurisé</h3>
+                    <p>Vos données personnelles sont protégées avec les normes de sécurité les plus élevées.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>100% Responsive</h3>
+                    <p>Utilisez le chatbot sur n'importe quel appareil : ordinateur, tablette ou smartphone.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Rapide & Efficace</h3>
+                    <p>Complétez votre préinscription en quelques minutes grâce à notre processus optimisé.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3>Support Multilingue</h3>
+                    <p>Communiquez dans votre langue préférée pour une expérience personnalisée.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Comment ça marche ?</h2>
+                <p class="section-description">
+                    Trois étapes simples pour votre préinscription
+                </p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Posez vos questions</h3>
+                        <p>Discutez avec notre chatbot pour obtenir toutes les informations sur les programmes, frais, et conditions d'admission.</p>
+                    </div>
+                    <div class="step-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Remplissez le formulaire</h3>
+                        <p>Complétez votre formulaire de préinscription guidé par notre assistant intelligent.</p>
+                    </div>
+                    <div class="step-icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Recevez votre confirmation</h3>
+                        <p>Obtenez une confirmation immédiate et les prochaines étapes de votre inscription.</p>
+                    </div>
+                    <div class="step-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Prêt à commencer votre parcours universitaire ?</h2>
+                <p>Rejoignez des milliers d'étudiants qui ont simplifié leur inscription avec notre chatbot.</p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-rocket"></i>
+                        Créer mon compte
+                    </a>
+                    <a href="{{ url_for('login') }}" class="btn btn-secondary btn-lg" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white;">
+                        <i class="fas fa-sign-in-alt"></i>
+                        J'ai déjà un compte
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>ICT University</span>
+                    </div>
+                    <p>Chatbot de préinscription universitaire intelligent pour faciliter votre parcours académique.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Liens rapides</h4>
+                    <ul>
+                        <li><a href="{{ url_for('chat') }}">Chatbot</a></li>
+                        <li><a href="{{ url_for('preinscription') }}">Préinscription</a></li>
+                        <li><a href="#features">Fonctionnalités</a></li>
+                        <li><a href="#how-it-works">Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Aide</a></li>
+                        <li><a href="#">Conditions</a></li>
+                        <li><a href="#">Confidentialité</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-envelope"></i> contact@ict-university.cm</li>
+                        <li><i class="fas fa-phone"></i> +237 6XX XXX XXX</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Yaoundé, Cameroun</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 ICT University. Développé par Madick Ange César. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        // Vérifier l'état d'authentification au chargement
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('/api/auth/check');
+                const data = await response.json();
+                
+                if (data.authenticated) {
+                    // Utilisateur connecté - modifier la navigation
+                    const navActions = document.querySelector('.nav-actions');
+                    navActions.innerHTML = `
+                        <span class="user-greeting">👋 ${data.user.prenom}</span>
+                        <a href="/profile" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-user"></i> Profil
+                        </a>
+                        <a href="/chat" class="btn btn-primary">
+                            <i class="fas fa-comments"></i> Chat
+                        </a>
+                    `;
+                    
+                    // Modifier le CTA principal
+                    const ctaButtons = document.querySelector('.cta-buttons');
+                    if (ctaButtons) {
+                        ctaButtons.innerHTML = `
+                            <a href="/chat" class="btn btn-primary btn-lg">
+                                <i class="fas fa-comments"></i> Accéder au Chat
+                            </a>
+                            <a href="/preinscription" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-file-alt"></i> Préinscription
+                            </a>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.log('Non authentifié ou erreur:', error);
+            }
+        });
+    </script>
+</body>
+</html>

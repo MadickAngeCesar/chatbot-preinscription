@@ -1,0 +1,34 @@
+flowchart TB
+    subgraph Client["🌐 Client (Navigateur Web)"]
+        UI["Interface HTML/CSS/JS<br/>(index.html, chat.html, preinscription.html)"]
+        JS["JavaScript Client<br/>(script.js - AJAX)"]
+    end
+    
+    subgraph Server["⚙️ Serveur Flask (Backend)"]
+        direction TB
+        App["app.py<br/>Routes & Endpoints"]
+        API["API REST<br/>(POST /api/message, POST /api/preinscription)"]
+    end
+    
+    subgraph Model["🧠 Module IA"]
+        ChatModel["chatbot_model.py<br/>(respond function)"]
+        NLP["nlp_utils.py<br/>(prétraitement NLP)"]
+    end
+    
+    subgraph Database["💾 Base de données"]
+        SQLite[("SQLite<br/>chatbot.db")]
+        Tables["Tables:<br/>- preinscriptions<br/>- messages<br/>- users (optionnel)"]
+    end
+    
+    UI --> JS
+    JS -->|"Requêtes HTTP (JSON)"| API
+    API --> App
+    App -->|"Appelle model.respond()"| ChatModel
+    ChatModel --> NLP
+    App -->|"Insère/Lit données"| SQLite
+    SQLite -.->|"Schéma"| Tables
+    
+    style Client fill:#a5d6ff,stroke:#0047ab,stroke-width:3px
+    style Server fill:#ffb84d,stroke:#d84315,stroke-width:3px
+    style Model fill:#d1a3ff,stroke:#6a0dad,stroke-width:3px
+    style Database fill:#90ee90,stroke:#006400,stroke-width:3px

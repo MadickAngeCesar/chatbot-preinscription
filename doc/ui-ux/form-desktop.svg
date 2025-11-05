@@ -1,0 +1,147 @@
+<svg width="1440" height="1200" viewBox="0 0 1440 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Gradient -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="primary-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6366F1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4F46E5;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="1440" height="1200" fill="url(#bg-gradient)"/>
+  
+  <!-- Form Container -->
+  <g id="form-container">
+    <rect x="270" y="80" width="900" height="1040" rx="24" fill="white" filter="drop-shadow(0 25px 50px rgba(0,0,0,0.15))"/>
+    
+    <!-- Form Header -->
+    <g id="form-header">
+      <!-- Icon -->
+      <circle cx="720" cy="160" r="40" fill="url(#primary-gradient)" filter="drop-shadow(0 10px 15px rgba(99,102,241,0.3))"/>
+      <text x="720" y="172" font-size="32" fill="white" text-anchor="middle">📝</text>
+      
+      <!-- Title -->
+      <text x="720" y="230" font-family="Inter" font-weight="800" font-size="32" fill="#111827" text-anchor="middle">Formulaire de Préinscription</text>
+      <text x="720" y="260" font-family="Inter" font-size="16" fill="#6B7280" text-anchor="middle">Complétez ce formulaire pour démarrer votre parcours universitaire</text>
+      
+      <!-- Progress Steps -->
+      <g id="progress-steps" transform="translate(370, 300)">
+        <!-- Step 1 - Active -->
+        <g id="step-1">
+          <circle cx="0" cy="0" r="20" fill="url(#primary-gradient)"/>
+          <text x="0" y="6" font-family="Inter" font-weight="700" font-size="16" fill="white" text-anchor="middle">1</text>
+          <text x="0" y="35" font-family="Inter" font-weight="600" font-size="11" fill="#6366F1" text-anchor="middle">Informations</text>
+          <text x="0" y="48" font-family="Inter" font-size="11" fill="#6366F1" text-anchor="middle">personnelles</text>
+        </g>
+        
+        <!-- Step 2 -->
+        <g id="step-2" transform="translate(250, 0)">
+          <circle cx="0" cy="0" r="20" fill="#E5E7EB"/>
+          <text x="0" y="6" font-family="Inter" font-weight="700" font-size="16" fill="#9CA3AF" text-anchor="middle">2</text>
+          <text x="0" y="35" font-family="Inter" font-size="11" fill="#9CA3AF" text-anchor="middle">Choix du</text>
+          <text x="0" y="48" font-family="Inter" font-size="11" fill="#9CA3AF" text-anchor="middle">programme</text>
+        </g>
+        
+        <!-- Step 3 -->
+        <g id="step-3" transform="translate(500, 0)">
+          <circle cx="0" cy="0" r="20" fill="#E5E7EB"/>
+          <text x="0" y="6" font-family="Inter" font-weight="700" font-size="16" fill="#9CA3AF" text-anchor="middle">3</text>
+          <text x="0" y="35" font-family="Inter" font-size="11" fill="#9CA3AF" text-anchor="middle">Documents</text>
+        </g>
+        
+        <!-- Step 4 -->
+        <g id="step-4" transform="translate(700, 0)">
+          <circle cx="0" cy="0" r="20" fill="#E5E7EB"/>
+          <text x="0" y="6" font-family="Inter" font-weight="700" font-size="16" fill="#9CA3AF" text-anchor="middle">4</text>
+          <text x="0" y="35" font-family="Inter" font-size="11" fill="#9CA3AF" text-anchor="middle">Confirmation</text>
+        </g>
+        
+        <!-- Progress Line -->
+        <line x1="-150" y1="0" x2="850" y2="0" stroke="#E5E7EB" stroke-width="2" opacity="0.5"/>
+      </g>
+      
+      <!-- Progress Bar -->
+      <rect x="370" y="390" width="700" height="4" rx="2" fill="#E5E7EB"/>
+      <rect x="370" y="390" width="175" height="4" rx="2" fill="url(#primary-gradient)"/>
+    </g>
+    
+    <!-- Form Content -->
+    <g id="form-content" transform="translate(320, 440)">
+      <!-- Step Title -->
+      <text x="0" y="0" font-family="Inter" font-weight="700" font-size="24" fill="#111827">👤 Informations Personnelles</text>
+      <line x1="0" y1="20" x2="800" y2="20" stroke="#E5E7EB" stroke-width="2"/>
+      
+      <!-- Form Fields Row 1 -->
+      <g transform="translate(0, 60)">
+        <!-- Nom Field -->
+        <text x="0" y="0" font-family="Inter" font-weight="600" font-size="14" fill="#111827">Nom <tspan fill="#EF4444">*</tspan></text>
+        <rect x="0" y="10" width="380" height="48" rx="8" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+        <text x="48" y="38" font-family="Inter" font-size="14" fill="#9CA3AF">Entrez votre nom</text>
+        <text x="16" y="38" font-size="18" fill="#9CA3AF">👤</text>
+        
+        <!-- Prénom Field -->
+        <text x="420" y="0" font-family="Inter" font-weight="600" font-size="14" fill="#111827">Prénom <tspan fill="#EF4444">*</tspan></text>
+        <rect x="420" y="10" width="380" height="48" rx="8" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+        <text x="468" y="38" font-family="Inter" font-size="14" fill="#9CA3AF">Entrez votre prénom</text>
+        <text x="436" y="38" font-size="18" fill="#9CA3AF">👤</text>
+      </g>
+      
+      <!-- Form Fields Row 2 -->
+      <g transform="translate(0, 160)">
+        <!-- Email Field -->
+        <text x="0" y="0" font-family="Inter" font-weight="600" font-size="14" fill="#111827">Email <tspan fill="#EF4444">*</tspan></text>
+        <rect x="0" y="10" width="380" height="48" rx="8" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+        <text x="48" y="38" font-family="Inter" font-size="14" fill="#9CA3AF">votre.email@exemple.com</text>
+        <text x="16" y="38" font-size="18" fill="#9CA3AF">✉️</text>
+        
+        <!-- Téléphone Field -->
+        <text x="420" y="0" font-family="Inter" font-weight="600" font-size="14" fill="#111827">Téléphone <tspan fill="#EF4444">*</tspan></text>
+        <rect x="420" y="10" width="380" height="48" rx="8" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+        <text x="468" y="38" font-family="Inter" font-size="14" fill="#9CA3AF">+237 6XX XXX XXX</text>
+        <text x="436" y="38" font-size="18" fill="#9CA3AF">📱</text>
+      </g>
+      
+      <!-- Form Fields Row 3 -->
+      <g transform="translate(0, 260)">
+        <!-- Date de naissance -->
+        <text x="0" y="0" font-family="Inter" font-weight="600" font-size="14" fill="#111827">Date de naissance <tspan fill="#EF4444">*</tspan></text>
+        <rect x="0" y="10" width="380" height="48" rx="8" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+        <text x="48" y="38" font-family="Inter" font-size="14" fill="#9CA3AF">JJ/MM/AAAA</text>
+        <text x="16" y="38" font-size="18" fill="#9CA3AF">📅</text>
+        
+        <!-- Lieu de naissance -->
+        <text x="420" y="0" font-family="Inter" font-weight="600" font-size="14" fill="#111827">Lieu de naissance <tspan fill="#EF4444">*</tspan></text>
+        <rect x="420" y="10" width="380" height="48" rx="8" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+        <text x="468" y="38" font-family="Inter" font-size="14" fill="#9CA3AF">Ville, Pays</text>
+        <text x="436" y="38" font-size="18" fill="#9CA3AF">📍</text>
+      </g>
+      
+      <!-- Adresse Field -->
+      <g transform="translate(0, 360)">
+        <text x="0" y="0" font-family="Inter" font-weight="600" font-size="14" fill="#111827">Adresse complète <tspan fill="#EF4444">*</tspan></text>
+        <rect x="0" y="10" width="800" height="100" rx="8" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+        <text x="48" y="38" font-family="Inter" font-size="14" fill="#9CA3AF">Entrez votre adresse complète</text>
+        <text x="16" y="38" font-size="18" fill="#9CA3AF">🏠</text>
+      </g>
+    </g>
+    
+    <!-- Navigation Buttons -->
+    <g id="navigation" transform="translate(320, 1000)">
+      <!-- Previous Button (disabled) -->
+      <rect x="0" y="0" width="140" height="48" rx="8" fill="#F3F4F6" stroke="#E5E7EB" stroke-width="1" opacity="0.5"/>
+      <text x="70" y="30" font-family="Inter" font-weight="600" font-size="14" fill="#9CA3AF" text-anchor="middle">← Précédent</text>
+      
+      <!-- Next Button -->
+      <rect x="660" y="0" width="140" height="48" rx="8" fill="url(#primary-gradient)"/>
+      <text x="730" y="30" font-family="Inter" font-weight="600" font-size="14" fill="white" text-anchor="middle">Suivant →</text>
+    </g>
+  </g>
+  
+  <!-- Help Section -->
+  <g transform="translate(720, 1150)">
+    <text x="0" y="0" font-family="Inter" font-size="14" fill="white" text-anchor="middle" opacity="0.9">❓ Besoin d'aide ? <tspan font-weight="600" text-decoration="underline">Parlez à notre chatbot</tspan></text>
+  </g>
+</svg>

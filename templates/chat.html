@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Universitaire - Préinscription en Ligne</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- SIDEBAR GAUCHE -->
+        <aside class="sidebar-left">
+            <div class="sidebar-header">
+                <div class="university-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h1 class="university-name">ICT University</h1>
+                <p class="university-tagline">Excellence & Innovation</p>
+            </div>
+
+            <nav class="nav-menu">
+                <div class="nav-section">
+                    <h3 class="nav-section-title">NAVIGATION</h3>
+                    <a href="#" class="nav-item active">
+                        <span class="nav-item-icon">💬</span>
+                        <span>Conversation</span>
+                    </a>
+                    <a href="{{ url_for('preinscription') }}" class="nav-item">
+                        <span class="nav-item-icon">📝</span>
+                        <span>Préinscription</span>
+                    </a>
+                    <a href="{{ url_for('index') }}" class="nav-item">
+                        <span class="nav-item-icon">🏠</span>
+                        <span>Accueil</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <h3 class="nav-section-title">INFORMATIONS</h3>
+                    <a href="#" class="nav-item" onclick="sendQuickAction('programmes')">
+                        <span class="nav-item-icon">🎓</span>
+                        <span>Programmes</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="sendQuickAction('documents')">
+                        <span class="nav-item-icon">📄</span>
+                        <span>Documents</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="sendQuickAction('frais')">
+                        <span class="nav-item-icon">💰</span>
+                        <span>Frais</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="sendQuickAction('calendrier')">
+                        <span class="nav-item-icon">📅</span>
+                        <span>Calendrier</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <h3 class="nav-section-title">SUPPORT</h3>
+                    <a href="#" class="nav-item" onclick="sendQuickAction('aide')">
+                        <span class="nav-item-icon">❓</span>
+                        <span>Aide</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="sendQuickAction('contact')">
+                        <span class="nav-item-icon">📞</span>
+                        <span>Contact</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- ZONE PRINCIPALE CHAT -->
+        <main class="main-chat">
+            <!-- Chat Header -->
+            <header class="chat-header">
+                <div class="chat-header-left">
+                    <div class="bot-avatar-container">
+                        <div class="bot-avatar-large">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <span class="online-indicator"></span>
+                    </div>
+                    <div class="bot-info">
+                        <h2>Assistant Virtuel ICT</h2>
+                        <p class="bot-status">
+                            <span class="status-dot"></span>
+                            En ligne - Réponse instantanée
+                        </p>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <a href="/profile" class="action-btn" title="Mon Profil" aria-label="Profil">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <button class="action-btn" title="Notifications" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="action-btn" title="Déconnexion" aria-label="Déconnexion" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Chat Body -->
+            <div class="chat-body" id="chatMessages">
+                <div class="date-divider">
+                    <span>Aujourd'hui</span>
+                </div>
+
+                <!-- Welcome Message -->
+                <div class="message-wrapper bot">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content-wrapper">
+                        <div class="message-bubble">
+                            <p><strong>👋 Bienvenue chez ICT University !</strong></p>
+                            <p>Je suis votre assistant virtuel, disponible 24/7 pour répondre à toutes vos questions concernant :</p>
+                            <ul>
+                                <li>📚 Nos programmes de formation (Licence & Master)</li>
+                                <li>📄 Les documents requis pour l'inscription</li>
+                                <li>💰 Les frais de scolarité et bourses disponibles</li>
+                                <li>📅 Le calendrier académique et dates importantes</li>
+                                <li>✍️ Le processus de préinscription en ligne</li>
+                            </ul>
+                            <p><strong>Comment puis-je vous aider aujourd'hui ?</strong></p>
+                        </div>
+                        <div class="message-time">{{ session.get('current_time', 'Maintenant') }}</div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions-container">
+                    <div class="quick-action-card" onclick="sendQuickAction('programmes')">
+                        <div class="quick-action-icon">🎓</div>
+                        <div>
+                            <strong>Programmes</strong>
+                            <p>Découvrir nos formations</p>
+                        </div>
+                    </div>
+                    <div class="quick-action-card" onclick="sendQuickAction('documents')">
+                        <div class="quick-action-icon">📄</div>
+                        <div>
+                            <strong>Documents</strong>
+                            <p>Liste des pièces requises</p>
+                        </div>
+                    </div>
+                    <div class="quick-action-card" onclick="sendQuickAction('frais')">
+                        <div class="quick-action-icon">💰</div>
+                        <div>
+                            <strong>Frais</strong>
+                            <p>Coûts et bourses</p>
+                        </div>
+                    </div>
+                    <div class="quick-action-card" onclick="sendQuickAction('inscription')">
+                        <div class="quick-action-icon">✍️</div>
+                        <div>
+                            <strong>Inscription</strong>
+                            <p>Commencer maintenant</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Messages will be added here dynamically -->
+            </div>
+
+            <!-- Chat Input Area -->
+            <div class="chat-input-area">
+                <div class="input-suggestions">
+                    <button class="suggestion-chip" onclick="sendSuggestion('Quels sont les programmes disponibles ?')">
+                        Programmes disponibles
+                    </button>
+                    <button class="suggestion-chip" onclick="sendSuggestion('Documents nécessaires')">
+                        Documents requis
+                    </button>
+                    <button class="suggestion-chip" onclick="sendSuggestion('Frais de scolarité')">
+                        Frais de scolarité
+                    </button>
+                </div>
+
+                <div class="input-wrapper">
+                    <div class="input-actions-left">
+                        <button class="input-icon-btn" onclick="attachFile()" title="Joindre un fichier">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                        <button class="input-icon-btn" onclick="addEmoji()" title="Emoji">
+                            <i class="fas fa-smile"></i>
+                        </button>
+                    </div>
+                    <textarea 
+                        class="message-input" 
+                        id="messageInput" 
+                        placeholder="Posez votre question ici... (Shift + Enter pour nouvelle ligne)" 
+                        rows="1"
+                        maxlength="1000"
+                    ></textarea>
+                    <button class="send-button" id="sendBtn" type="button" onclick="window.sendMessage && window.sendMessage()" aria-label="Envoyer">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- SIDEBAR DROITE -->
+        <aside class="sidebar-right">
+            <!-- Statistiques Widget -->
+            <div class="widget">
+                <div class="widget-header">
+                    <h3 class="widget-title">
+                        <span class="widget-icon">📊</span>
+                        Statistiques 2025
+                    </h3>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="studentsCount">2,847</div>
+                        <div class="stat-label">Étudiants actifs</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="programsCount">12</div>
+                        <div class="stat-label">Programmes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">95%</div>
+                        <div class="stat-label">Taux de réussite</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">87%</div>
+                        <div class="stat-label">Employabilité</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progression Widget -->
+            <div class="widget">
+                <div class="widget-header">
+                    <h3 class="widget-title">
+                        <span class="widget-icon">📈</span>
+                        Votre progression
+                    </h3>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">Profil complété</span>
+                        <span class="progress-value">40%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 40%"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">Documents</span>
+                        <span class="progress-value">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">Inscription</span>
+                        <span class="progress-value">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Widget -->
+            <div class="widget">
+                <div class="widget-header">
+                    <h3 class="widget-title">
+                        <span class="widget-icon">🔔</span>
+                        Notifications
+                    </h3>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">Inscriptions ouvertes</div>
+                        <div class="notification-text">Les préinscriptions 2025-2026 sont maintenant ouvertes</div>
+                        <div class="notification-time">Il y a 2 heures</div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">Date limite</div>
+                        <div class="notification-text">Fin des inscriptions : 30 novembre 2025</div>
+                        <div class="notification-time">Il y a 5 heures</div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">Bourses disponibles</div>
+                        <div class="notification-text">50% de réduction pour les meilleurs étudiants</div>
+                        <div class="notification-time">Hier</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Widget -->
+            <div class="widget cta-card">
+                <div class="cta-icon">🎓</div>
+                <h3 class="cta-title">Prêt à commencer ?</h3>
+                <p class="cta-text">Complétez votre préinscription maintenant et rejoignez l'excellence !</p>
+                <a href="{{ url_for('preinscription') }}" class="cta-button" onclick="startApplication()">
+                    <i class="fas fa-rocket"></i>
+                    Commencer l'inscription
+                </a>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Chargement...</p>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}?v=20251105c"></script>
+    <script>
+        // Variables globales pour la session
+        const sessionId = '{{ session.get("session_id", "") }}';
+        
+        // Fonctions utilitaires
+        function getCurrentTime() {
+            return new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 150) + 'px';
+        }
+
+        function scrollToBottom() {
+            const chatMessages = document.getElementById('chatMessages');
+            if (chatMessages) {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        // Fonction pour envoyer une action rapide
+        function sendQuickAction(query) {
+            const messageInput = document.getElementById('messageInput');
+            if (messageInput) {
+                // Mapper les actions aux questions
+                const actionMap = {
+                    'programmes': 'Quels sont les programmes disponibles ?',
+                    'documents': 'Quels documents sont nécessaires ?',
+                    'frais': 'Quels sont les frais de scolarité ?',
+                    'calendrier': 'Quel est le calendrier académique ?',
+                    'inscription': 'Comment puis-je m\'inscrire ?',
+                    'aide': 'J\'ai besoin d\'aide',
+                    'contact': 'Comment vous contacter ?',
+                    'admission': 'Quelles sont les conditions d\'admission ?'
+                };
+                
+                messageInput.value = actionMap[query] || query;
+                sendMessage();
+            }
+        }
+
+        // Fonction pour envoyer une suggestion
+        function sendSuggestion(text) {
+            const messageInput = document.getElementById('messageInput');
+            if (messageInput) {
+                messageInput.value = text;
+                sendMessage();
+            }
+        }
+
+        // Gestion du clavier
+        function handleKeyDown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // Fonctions additionnelles
+        function attachFile() {
+            showToast('Fonctionnalité bientôt disponible', 'info');
+        }
+
+        function addEmoji() {
+            showToast('Fonctionnalité bientôt disponible', 'info');
+        }
+
+        function startApplication() {
+            window.location.href = "{{ url_for('preinscription') }}";
+        }
+
+        // Animation des statistiques
+        function animateStats() {
+            const studentsCount = document.getElementById('studentsCount');
+            if (studentsCount) {
+                let count = 2500;
+                const target = 2847;
+                const duration = 2000;
+                const increment = (target - count) / (duration / 50);
+                
+                const timer = setInterval(() => {
+                    count += increment;
+                    if (count >= target) {
+                        count = target;
+                        clearInterval(timer);
+                    }
+                    studentsCount.textContent = Math.floor(count).toLocaleString('fr-FR');
+                }, 50);
+            }
+        }
+
+        // Initialisation au chargement de la page
+        window.onload = function() {
+            // Initialize chat functionality
+            if (typeof initializeChat === 'function') {
+                initializeChat();
+            }
+            
+            // Animate statistics
+            animateStats();
+            
+            // Enable send button when input has content
+            const messageInput = document.getElementById('messageInput');
+            const sendBtn = document.getElementById('sendBtn');
+            
+            if (messageInput && sendBtn) {
+                messageInput.addEventListener('input', function() {
+                    const hasContent = this.value.trim().length > 0;
+                    sendBtn.disabled = !hasContent;
+                    autoResize(this);
+                });
+            }
+            
+            // Focus on input
+            if (messageInput) {
+                messageInput.focus();
+            }
+        };
+
+        // Mise à jour périodique des stats (optionnel)
+        setInterval(() => {
+            // Vous pouvez ajouter ici des mises à jour dynamiques si nécessaire
+        }, 30000);
+
+        // Fonction de déconnexion
+        async function logout() {
+            if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+                try {
+                    const response = await fetch('/api/auth/logout', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        window.location.href = '/login';
+                    } else {
+                        alert('Erreur lors de la déconnexion');
+                    }
+                } catch (error) {
+                    console.error('Erreur:', error);
+                    alert('Erreur de connexion');
+                }
+            }
+        }
+
+        // Charger les infos utilisateur au démarrage
+        async function loadUserInfo() {
+            try {
+                const response = await fetch('/api/auth/profile');
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Mettre à jour le message de bienvenue
+                    const welcomeMsg = document.querySelector('.message-bubble p');
+                    if (welcomeMsg) {
+                        welcomeMsg.innerHTML = `Bonjour <strong>${data.user.prenom} ${data.user.nom}</strong> ! 👋<br><br>Je suis votre assistant virtuel pour la préinscription à ICT University. Je suis là pour répondre à toutes vos questions concernant nos programmes, les conditions d'admission, les frais de scolarité et bien plus encore !`;
+                    }
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement du profil:', error);
+            }
+        }
+
+        // Appeler loadUserInfo au chargement
+        loadUserInfo();
+    </script>
+</body>
+</html>

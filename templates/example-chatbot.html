@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Universitaire - Préinscription en Ligne</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #4338CA;
+            --secondary: #06B6D4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --dark: #1F2937;
+            --light: #F9FAFB;
+            --border: #E5E7EB;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 320px 1fr 350px;
+            gap: 20px;
+            height: calc(100vh - 40px);
+        }
+
+        /* SIDEBAR GAUCHE */
+        .sidebar-left {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 30px 25px;
+            color: white;
+        }
+
+        .university-logo {
+            width: 70px;
+            height: 70px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .university-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .university-tagline {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .nav-menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .nav-section {
+            margin-bottom: 25px;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #9CA3AF;
+            padding: 10px 15px 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin: 3px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #4B5563;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: var(--light);
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-item-icon {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-right: 12px;
+        }
+
+        .nav-item-badge {
+            margin-left: auto;
+            background: var(--danger);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* ZONE PRINCIPALE CHAT */
+        .main-chat {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        .chat-header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .bot-avatar-container {
+            position: relative;
+        }
+
+        .bot-avatar-large {
+            width: 55px;
+            height: 55px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+
+        .online-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 14px;
+            height: 14px;
+            background: var(--success);
+            border: 3px solid white;
+            border-radius: 50%;
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+        }
+
+        .bot-info h2 {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        .bot-status {
+            font-size: 13px;
+            opacity: 0.95;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .action-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        .chat-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: linear-gradient(to bottom, #F9FAFB 0%, #FFFFFF 100%);
+            position: relative;
+        }
+
+        .date-divider {
+            text-align: center;
+            margin: 30px 0 20px;
+            position: relative;
+        }
+
+        .date-divider span {
+            background: white;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #6B7280;
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+            display: inline-block;
+        }
+
+        .message-wrapper {
+            display: flex;
+            margin-bottom: 20px;
+            animation: messageSlide 0.4s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-wrapper.user {
+            justify-content: flex-end;
+        }
+
+        .message-wrapper.bot {
+            justify-content: flex-start;
+        }
+
+        .message-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .message-wrapper.bot .message-avatar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            margin-right: 12px;
+        }
+
+        .message-wrapper.user .message-avatar {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            margin-left: 12px;
+        }
+
+        .message-content-wrapper {
+            max-width: 65%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-bubble {
+            padding: 16px 20px;
+            border-radius: 18px;
+            line-height: 1.6;
+            font-size: 15px;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+
+        .message-wrapper.bot .message-bubble {
+            background: white;
+            color: var(--dark);
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .message-wrapper.user .message-bubble {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #9CA3AF;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .message-wrapper.user .message-time {
+            justify-content: flex-end;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .message-action-btn {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .message-action-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .quick-actions-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            margin-left: 54px;
+        }
+
+        .quick-action-card {
+            background: white;
+            border: 2px solid var(--primary);
+            padding: 12px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .quick-action-card:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .quick-action-icon {
+            font-size: 18px;
+        }
+
+        .typing-indicator-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .typing-bubble {
+            background: white;
+            padding: 16px 20px;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .typing-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: typingAnimation 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.7; }
+            30% { transform: translateY(-10px); opacity: 1; }
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #F3F4F6 0%, #FFFFFF 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 54px;
+            border-left: 4px solid var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .feature-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .feature-card h4 {
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .feature-card p {
+            color: #6B7280;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 12px;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            color: #4B5563;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            color: var(--success);
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        /* ZONE INPUT */
+        .chat-input-area {
+            padding: 25px 30px;
+            background: white;
+            border-top: 1px solid var(--border);
+        }
+
+        .input-suggestions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .suggestion-chip {
+            background: var(--light);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            color: #4B5563;
+        }
+
+        .suggestion-chip:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .input-wrapper {
+            display: flex;
+            align-items: end;
+            gap: 12px;
+            background: var(--light);
+            border-radius: 15px;
+            padding: 5px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .input-actions-left {
+            display: flex;
+            gap: 5px;
+            padding: 5px;
+        }
+
+        .input-icon-btn {
+            width: 38px;
+            height: 38px;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #6B7280;
+            transition: all 0.3s ease;
+        }
+
+        .input-icon-btn:hover {
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary);
+        }
+
+        .message-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px 8px;
+            font-size: 15px;
+            outline: none;
+            resize: none;
+            font-family: inherit;
+            max-height: 120px;
+            min-height: 38px;
+        }
+
+        .send-button {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+        }
+
+        .send-button:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .send-button:active {
+            transform: scale(0.95);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* SIDEBAR DROITE */
+        .sidebar-right {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .widget {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .widget-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .widget-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .widget-icon {
+            font-size: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--light) 0%, white 100%);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-item {
+            margin-bottom: 18px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .progress-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .progress-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        .notification-item {
+            display: flex;
+            gap: 12px;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notification-item:hover {
+            background: #E5E7EB;
+            transform: translateX(-5px);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 3px;
+        }
+
+        .notification-text {
+            font-size: 12px;
+            color: #6B7280;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            font-size: 11px;
+            color: #9CA3AF;
+            margin-top: 5px;
+        }
+
+        .cta-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .cta-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .cta-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .cta-text {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .cta-button {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 14px 30px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1400px) {
+            .app-container {
+                grid-template-columns: 280px 1fr 320px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .app-container {
+                grid-template-columns: 1fr 350px;
+            }
+            .sidebar-left {
+                display: none;
+            }
+        }
+
+        @media (max-width: 968px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar-right {
+                display: none;
+            }
+            .message-content-wrapper {
+                max-width: 85%;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 10px;
+            }
+            .app-container {
+                height: calc(100vh - 20px);
+            }
+            .chat-body {
+                padding: 20px 15px;
+            }
+            .quick-actions-container {
+                margin-left: 0;
+            }
+            .feature-card {
+                margin: 15px 0;
+            }
+        }
+
+        /* SCROLLBAR CUSTOM */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #D1D5DB;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9CA3AF;
+        }
+
+        .file-upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 15px 54px;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary);
+            background: var(--light);
+        }
+
+        .voice-recording {
+            background: var(--danger);
+            animation: recordPulse 1.5s infinite;
+        }
+
+        @keyframes recordPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- SIDEBAR GAUCHE -->
+        <aside class="sidebar-left">
+            <div class="sidebar-header">
+                <div class="university-logo">🎓</div>
+                <div class="university-name">ICT University</div>
+                <div class="university-tagline">Excellence in Technology Education</div>
+            </div>
+
+            <nav class="nav-menu">
+                <div class="nav-section">
+                    <div class="nav-section-title">Principal</div>
+                    <div class="nav-item active">
+                        <div class="nav-item-icon">💬</div>
+                        <span>Chat Assistant</span>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-item-icon">📝</div>
+                        <span>Préinscription</span>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-item-icon">📊</div>
+                        <span>Mon Dossier</span>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Informations</div>
+                    <div class="nav-item">
+                        <div class="nav-item-icon">📚</div>
+                        <span>Programmes</span>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-item-icon">🎯</div>
+                        <span>Admission</span>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-item-icon">💰</div>
+                        <span>Frais & Bourses</span>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-item-icon">📅</div>
+                        <span>Calendrier</span>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Support</div>
+                    <div class="nav-item">
+                        <div class="nav-item-icon">❓</div>
+                        <span>FAQ</span>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-item-icon">📞</div>
+                        <span>Contact</span>
+                        <span class="nav-item-badge">New</span>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-item-icon">📖</div>
+                        <span>Guide Étudiant</span>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- ZONE PRINCIPALE CHAT -->
+        <main class="main-chat">
+            <div class="chat-header">
+                <div class="chat-header-left">
+                    <div class="bot-avatar-container">
+                        <div class="bot-avatar-large">🤖</div>
+                        <div class="online-indicator"></div>
+                    </div>
+                    <div class="bot-info">
+                        <h2>Assistant Préinscription IA</h2>
+                        <div class="bot-status">
+                            <span>●</span>
+                            <span>En ligne - Temps de réponse ~2s</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button class="action-btn" title="Rechercher">🔍</button>
+                    <button class="action-btn" title="Historique">📜</button>
+                    <button class="action-btn" title="Exporter">📤</button>
+                    <button class="action-btn" title="Paramètres">⚙️</button>
+                </div>
+            </div>
+
+            <div class="chat-body" id="chatBody">
+                <div class="date-divider">
+                    <span>Aujourd'hui - 4 Novembre 2025</span>
+                </div>
+
+                <div class="message-wrapper bot">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content-wrapper">
+                        <div class="message-bubble">
+                            Bonjour et bienvenue sur le portail de préinscription de <strong>ICT University</strong> ! 👋<br><br>
+                            Je suis votre assistant virtuel intelligent, alimenté par l'IA. Je suis ici pour vous accompagner tout au long de votre processus d'inscription.<br><br>
+                            <strong>Je peux vous aider avec :</strong><br>
+                            ✅ Informations sur les programmes et filières<br>
+                            ✅ Conditions d'admission et prérequis<br>
+                            ✅ Documents nécessaires<br>
+                            ✅ Frais de scolarité et bourses<br>
+                            ✅ Processus de préinscription en ligne<br>
+                            ✅ Calendrier académique et dates importantes<br><br>
+                            Comment puis-je vous aider aujourd'hui ? 😊
+                        </div>
+                        <div class="message-time">⏰ 09:23</div>
+                    </div>
+                </div>
+
+                <div class="quick-actions-container">
+                    <div class="quick-action-card" onclick="sendQuickAction('programmes')">
+                        <span class="quick-action-icon">📚</span>
+                        <span>Voir les programmes</span>
+                    </div>
+                    <div class="quick-action-card" onclick="sendQuickAction('admission')">
+                        <span class="quick-action-icon">🎯</span>
+                        <span>Conditions d'admission</span>
+                    </div>
+                    <div class="quick-action-card" onclick="sendQuickAction('documents')">
+                        <span class="quick-action-icon">📄</span>
+                        <span>Documents requis</span>
+                    </div>
+                    <div class="quick-action-card" onclick="sendQuickAction('frais')">
+                        <span class="quick-action-icon">💰</span>
+                        <span>Frais & Bourses</span>
+                    </div>
+                    <div class="quick-action-card" onclick="sendQuickAction('calendrier')">
+                        <span class="quick-action-icon">📅</span>
+                        <span>Calendrier académique</span>
+                    </div>
+                    <div class="quick-action-card" onclick="sendQuickAction('inscription')">
+                        <span class="quick-action-icon">✍️</span>
+                        <span>Commencer l'inscription</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-card-header">
+                        <div class="feature-icon">⚡</div>
+                        <h4>Processus rapide et sécurisé</h4>
+                    </div>
+                    <p>Notre système de préinscription en ligne vous permet de compléter votre dossier en moins de 15 minutes.</p>
+                    <ul class="feature-list">
+                        <li>Formulaire intelligent guidé</li>
+                        <li>Upload de documents sécurisé</li>
+                        <li>Confirmation instantanée par email</li>
+                        <li>Suivi en temps réel de votre dossier</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="input-suggestions">
+                    <div class="suggestion-chip" onclick="sendSuggestion('Quels sont les programmes en informatique ?')">💻 Programmes informatique</div>
+                    <div class="suggestion-chip" onclick="sendSuggestion('Comment s\'inscrire ?')">📝 Comment s'inscrire</div>
+                    <div class="suggestion-chip" onclick="sendSuggestion('Quand commencent les cours ?')">📅 Dates importantes</div>
+                    <div class="suggestion-chip" onclick="sendSuggestion('Y a-t-il des bourses ?')">🎓 Bourses disponibles</div>
+                </div>
+
+                <div class="input-wrapper">
+                    <div class="input-actions-left">
+                        <button class="input-icon-btn" onclick="attachFile()" title="Joindre un fichier">📎</button>
+                        <button class="input-icon-btn" onclick="toggleVoice()" title="Message vocal">🎤</button>
+                        <button class="input-icon-btn" onclick="addEmoji()" title="Emoji">😊</button>
+                    </div>
+                    <textarea 
+                        class="message-input" 
+                        id="messageInput" 
+                        placeholder="Tapez votre message ici..."
+                        rows="1"
+                        onkeydown="handleKeyDown(event)"
+                        oninput="autoResize(this)"
+                    ></textarea>
+                    <button class="send-button" id="sendBtn" onclick="sendMessage()">
+                        ➤
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- SIDEBAR DROITE -->
+        <aside class="sidebar-right">
+            <!-- Widget Statistiques -->
+            <div class="widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <span class="widget-icon">📊</span>
+                        Statistiques en Direct
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalUsers">1,247</div>
+                        <div class="stat-label">Étudiants Inscrits</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="onlineUsers">89</div>
+                        <div class="stat-label">En Ligne</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="todayApps">156</div>
+                        <div class="stat-label">Demandes Aujourd'hui</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">4.9★</div>
+                        <div class="stat-label">Satisfaction</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Widget Progression -->
+            <div class="widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <span class="widget-icon">📈</span>
+                        Votre Progression
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">Profil complété</span>
+                        <span class="progress-value">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">Documents téléchargés</span>
+                        <span class="progress-value">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">Dossier finalisé</span>
+                        <span class="progress-value">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Widget Notifications -->
+            <div class="widget">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <span class="widget-icon">🔔</span>
+                        Notifications
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-icon">📢</div>
+                    <div class="notification-content">
+                        <div class="notification-title">Nouvelle session</div>
+                        <div class="notification-text">Les inscriptions pour 2025-2026 sont ouvertes</div>
+                        <div class="notification-time">Il y a 2 heures</div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-icon">🎓</div>
+                    <div class="notification-content">
+                        <div class="notification-title">Bourses d'excellence</div>
+                        <div class="notification-text">Nouvelles bourses disponibles pour étudiants méritants</div>
+                        <div class="notification-time">Il y a 5 heures</div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-icon">📅</div>
+                    <div class="notification-content">
+                        <div class="notification-title">Date limite</div>
+                        <div class="notification-text">Inscriptions closes le 30 novembre 2025</div>
+                        <div class="notification-time">Il y a 1 jour</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Widget CTA -->
+            <div class="widget cta-card">
+                <div class="cta-icon">🚀</div>
+                <div class="cta-title">Prêt à commencer ?</div>
+                <div class="cta-text">Complétez votre préinscription en ligne maintenant et recevez votre confirmation dans les 24h.</div>
+                <button class="cta-button" onclick="startApplication()">Démarrer l'inscription</button>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Variables globales
+        const chatBody = document.getElementById('chatBody');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        let isTyping = false;
+        let conversationHistory = [];
+
+        // Base de connaissances complète
+        const knowledgeBase = {
+            programmes: {
+                title: "📚 Programmes Disponibles",
+                content: `Nous offrons une gamme complète de programmes en technologie et informatique :
+
+<strong>🎓 NIVEAU LICENCE (BAC+3)</strong>
+
+<strong>1. Licence en Informatique Générale</strong>
+• Durée : 3 ans
+• Débouchés : Développeur, Analyste systèmes
+• Spécialisations : Développement web, Mobile, Desktop
+
+<strong>2. Licence en Génie Logiciel</strong>
+• Durée : 3 ans
+• Débouchés : Ingénieur logiciel, Chef de projet
+• Focus : Architecture logicielle, DevOps, Agile
+
+<strong>3. Licence en Réseaux & Télécommunications</strong>
+• Durée : 3 ans
+• Débouchés : Administrateur réseaux, Ingénieur télécom
+• Certifications : CCNA, CompTIA Network+
+
+<strong>4. Licence en Cybersécurité</strong>
+• Durée : 3 ans
+• Débouchés : Expert sécurité, Analyste SOC
+• Certifications : CEH, Security+
+
+<strong>🎓 NIVEAU MASTER (BAC+5)</strong>
+
+<strong>1. Master en Intelligence Artificielle & Data Science</strong>
+• Durée : 2 ans
+• Technologies : Python, TensorFlow, PyTorch
+• Projets : ML, Deep Learning, NLP
+
+<strong>2. Master en Cloud Computing & DevOps</strong>
+• Durée : 2 ans
+• Plateformes : AWS, Azure, Google Cloud
+• Focus : Kubernetes, Docker, CI/CD
+
+<strong>3. Master en Blockchain & Web3</strong>
+• Durée : 2 ans
+• Technologies : Ethereum, Solidity, Smart Contracts
+• Projets : DApps, NFT, DeFi
+
+Quel programme vous intéresse particulièrement ?`,
+                actions: [
+                    { label: "📋 Détails Licence", query: "details licence" },
+                    { label: "🎓 Détails Master", query: "details master" },
+                    { label: "💼 Débouchés professionnels", query: "débouchés" },
+                    { label: "✍️ S'inscrire maintenant", query: "inscription" }
+                ]
+            },
+            admission: {
+                title: "🎯 Conditions d'Admission",
+                content: `Voici les conditions d'admission détaillées pour chaque niveau :
+
+<strong>📌 ADMISSION EN LICENCE (L1)</strong>
+
+<strong>Conditions académiques :</strong>
+• Baccalauréat série C, D, E ou équivalent
+• Moyenne générale minimale : 12/20
+• Moyenne en mathématiques : 11/20 minimum
+• Pas de limite d'âge
+
+<strong>Processus de sélection :</strong>
+1️⃣ Préinscription en ligne
+2️⃣ Test d'admission (Maths, Logique, Anglais)
+3️⃣ Entretien de motivation (optionnel)
+4️⃣ Étude du dossier académique
+
+<strong>Test d'admission :</strong>
+• Mathématiques : 40%
+• Logique & Raisonnement : 30%
+• Anglais technique : 20%
+• Culture informatique : 10%
+• Score minimum requis : 50/100
+
+<strong>📌 ADMISSION EN MASTER (M1)</strong>
+
+<strong>Conditions académiques :</strong>
+• Licence en Informatique ou domaine connexe
+• Moyenne générale minimale : 13/20
+• Expérience professionnelle (recommandée)
+
+<strong>Processus de sélection :</strong>
+1️⃣ Préinscription en ligne
+2️⃣ Étude du dossier académique
+3️⃣ Test technique spécialisé
+4️⃣ Entretien de motivation (obligatoire)
+5️⃣ Présentation d'un mini-projet
+
+<strong>Critères d'évaluation :</strong>
+• Dossier académique : 30%
+• Test technique : 25%
+• Entretien : 25%
+• Projet : 20%
+
+<strong>📌 ADMISSION DIRECTE (Équivalence)</strong>
+
+Vous avez déjà étudié ailleurs ? Nous acceptons les équivalences !
+• L2/L3 : Sur étude de dossier
+• Délai de traitement : 2-3 semaines
+
+<strong>📊 Statistiques 2024 :</strong>
+• Taux d'acceptation Licence : 68%
+• Taux d'acceptation Master : 52%
+• 450 places disponibles par promotion
+
+Avez-vous des questions sur le processus d'admission ?`,
+                actions: [
+                    { label: "📝 Préparer le test", query: "preparation test" },
+                    { label: "📄 Documents à fournir", query: "documents" },
+                    { label: "📅 Dates des tests", query: "calendrier" },
+                    { label: "✍️ Commencer l'inscription", query: "inscription" }
+                ]
+            },
+            documents: {
+                title: "📄 Documents Requis",
+                content: `Liste complète des documents nécessaires pour votre préinscription :
+
+<strong>📋 DOCUMENTS OBLIGATOIRES (Tous niveaux)</strong>
+
+<strong>1. Documents d'identité :</strong>
+• ✅ Copie certifiée de la Carte d'Identité Nationale (recto-verso)
+• ✅ Acte de naissance (original ou copie certifiée, moins de 3 mois)
+• ✅ 4 photos d'identité récentes (format 4x4, fond blanc)
+
+<strong>2. Documents académiques :</strong>
+• ✅ Diplôme du Baccalauréat (copie certifiée)
+• ✅ Relevés de notes Terminale, 1ère et 2nde
+• ✅ Attestation de réussite (si diplôme non encore disponible)
+• ✅ Certificat de scolarité de l'année en cours
+
+<strong>3. Documents administratifs :</strong>
+• ✅ Certificat médical (moins de 3 mois)
+• ✅ Certificat de visite et de contre-visite
+• ✅ Fiche de renseignements (fournie par l'université)
+
+<strong>📋 DOCUMENTS SUPPLÉMENTAIRES POUR MASTER</strong>
+
+• ✅ Diplôme de Licence (copie certifiée)
+• ✅ Relevés de notes L1, L2 et L3
+• ✅ Attestation de stage (si applicable)
+• ✅ CV détaillé
+• ✅ Lettre de motivation (2 pages max)
+• ✅ Lettres de recommandation (2 minimum)
+• ✅ Portfolio ou projets réalisés (optionnel)
+
+<strong>💾 FORMAT NUMÉRIQUE</strong>
+
+<strong>Pour l'upload en ligne :</strong>
+• Format accepté : PDF uniquement
+• Taille maximale : 2 MB par fichier
+• Résolution : 300 DPI minimum
+• Nom du fichier : NOM_TypeDocument_Date
+  Exemple : DUPONT_ActeNaissance_2025.pdf
+
+<strong>📦 DOSSIER PHYSIQUE</strong>
+
+<strong>À apporter lors de la confirmation :</strong>
+• Tous les documents originaux
+• 2 chemises cartonnées
+• 1 enveloppe kraft A4
+
+<strong>⚠️ POINTS IMPORTANTS</strong>
+
+• Les documents en langue étrangère doivent être traduits par un traducteur assermenté
+• Les diplômes étrangers nécessitent une équivalence du MINESUP
+• Les photocopies doivent être certifiées conformes
+• Délai de conservation du dossier : 90 jours
+
+<strong>🔍 VÉRIFICATION DES DOCUMENTS</strong>
+
+Notre système vérifie automatiquement :
+• ✓ Authenticité des diplômes
+• ✓ Qualité des scans
+• ✓ Conformité des formats
+• ✓ Complétude du dossier
+
+Vous recevrez un email de confirmation après validation.
+
+Avez-vous tous les documents requis ?`,
+                actions: [
+                    { label: "📸 Guide de numérisation", query: "guide scan" },
+                    { label: "❓ Documents manquants", query: "documents manquants" },
+                    { label: "📤 Télécharger maintenant", query: "upload documents" },
+                    { label: "✍️ Continuer l'inscription", query: "inscription" }
+                ]
+            },
+            frais: {
+                title: "💰 Frais de Scolarité & Bourses",
+                content: `Informations détaillées sur les coûts et opportunités de financement :
+
+<strong>💵 FRAIS DE SCOLARITÉ 2025-2026</strong>
+
+<strong>🎓 NIVEAU LICENCE (par an)</strong>
+
+<strong>Frais d'inscription :</strong>
+• Frais de dossier : 25,000 FCFA (non remboursable)
+• Frais d'inscription : 50,000 FCFA
+• Carte étudiante : 5,000 FCFA
+<strong>Sous-total : 80,000 FCFA</strong>
+
+<strong>Frais de scolarité :</strong>
+• 1er semestre : 225,000 FCFA
+• 2ème semestre : 225,000 FCFA
+<strong>Total annuel : 450,000 FCFA</strong>
+
+<strong>TOTAL LICENCE (1ère année) : 530,000 FCFA</strong>
+<strong>Années suivantes : 450,000 FCFA/an</strong>
+
+<strong>🎓 NIVEAU MASTER (par an)</strong>
+
+<strong>Frais d'inscription :</strong>
+• Frais de dossier : 35,000 FCFA (non remboursable)
+• Frais d'inscription : 75,000 FCFA
+• Carte étudiante : 5,000 FCFA
+<strong>Sous-total : 115,000 FCFA</strong>
+
+<strong>Frais de scolarité :</strong>
+• 1er semestre : 325,000 FCFA
+• 2ème semestre : 325,000 FCFA
+<strong>Total annuel : 650,000 FCFA</strong>
+
+<strong>TOTAL MASTER (1ère année) : 765,000 FCFA</strong>
+<strong>2ème année : 650,000 FCFA</strong>
+
+<strong>🎁 BOURSES & RÉDUCTIONS</strong>
+
+<strong>1. Bourse d'Excellence Académique</strong>
+• Critère : Moyenne ≥ 15/20
+• Montant : 50% des frais de scolarité
+• Renouvellement annuel sur résultats
+
+<strong>2. Bourse au Mérite</strong>
+• Critère : Mention Très Bien au BAC
+• Montant : 30% des frais de scolarité
+• Valable 1ère année uniquement
+
+<strong>3. Bourse Sociale</strong>
+• Critère : Situation financière difficile
+• Montant : 20-40% selon étude sociale
+• Sur dossier et entretien
+
+<strong>4. Bourse Sport & Culture</strong>
+• Critère : Athlète de haut niveau ou artiste
+• Montant : 25% des frais
+• Sur présentation de titres/certificats
+
+<strong>5. Réduction Fratrie</strong>
+• 2 membres : -10% pour le 2ème
+• 3+ membres : -15% pour chaque suivant
+
+<strong>6. Parrainage Entreprise</strong>
+• Entreprise partenaire couvre 100%
+• Engagement de travail post-diplôme
+• Contrat de 2-3 ans
+
+<strong>💳 MODALITÉS DE PAIEMENT</strong>
+
+<strong>Options disponibles :</strong>
+• ✅ Paiement comptant (remise de 5%)
+• ✅ Paiement en 2 tranches (50% chaque semestre)
+• ✅ Paiement en 3 tranches (sans frais)
+• ✅ Paiement mensuel (9 mensualités)
+
+<strong>Moyens de paiement acceptés :</strong>
+• 💳 Mobile Money (MTN, Orange)
+• 🏦 Virement bancaire
+• 💵 Espèces (au guichet)
+• 💳 Carte bancaire
+
+<strong>📊 COÛTS ADDITIONNELS</strong>
+
+• Matériel pédagogique : ~50,000 FCFA/an
+• Laptop (recommandé) : à partir de 250,000 FCFA
+• Assurance étudiant : 15,000 FCFA/an
+• Transport : variable selon localisation
+
+<strong>🎯 AIDE AU FINANCEMENT</strong>
+
+Nous vous accompagnons avec :
+• Partenariats bancaires (prêts étudiants à 3%)
+• Programme "Work & Study" (travail à mi-temps sur campus)
+• Bourses gouvernementales (dossier assisté)
+
+Souhaitez-vous plus d'informations sur une bourse spécifique ?`,
+                actions: [
+                    { label: "📝 Demander une bourse", query: "demande bourse" },
+                    { label: "💳 Simuler mon financement", query: "simulation" },
+                    { label: "🏦 Partenaires bancaires", query: "banques" },
+                    { label: "✍️ Continuer l'inscription", query: "inscription" }
+                ]
+            },
+            calendrier: {
+                title: "📅 Calendrier Académique 2025-2026",
+                content: `Planning complet de l'année universitaire :
+
+<strong>🗓️ PHASE DE PRÉINSCRIPTION</strong>
+
+<strong>📌 1er Semestre (Septembre 2025)</strong>
+• 01 Nov - 30 Nov 2025 : Préinscriptions en ligne
+• 01 - 15 Déc 2025 : Tests d'admission
+• 16 - 20 Déc 2025 : Publication des résultats
+• 21 Déc - 05 Jan : Confirmation et paiement 1ère tranche
+• 10 - 15 Jan 2026 : Retrait cartes étudiantes
+
+<strong>📌 2ème Semestre (Février 2026)</strong>
+• 01 - 28 Fév 2026 : Inscriptions tardives (places limitées)
+• 01 - 10 Mars 2026 : Tests de rattrapage
+• Rentrée : 15 Mars 2026
+
+<strong>🎓 ANNÉE ACADÉMIQUE</strong>
+
+<strong>SEMESTRE 1</strong>
+• 20 Jan 2026 : Rentrée académique officielle
+• 20 Jan - 31 Mai : Cours & TD
+• 03 - 21 Juin : Examens semestriels
+• 23 - 30 Juin : Rattrapages
+• 05 Juil : Publication résultats
+
+<strong>Vacances : 06 Juil - 15 Août 2026</strong>
+
+<strong>SEMESTRE 2</strong>
+• 17 Août 2026 : Rentrée 2ème semestre
+• 17 Août - 20 Déc : Cours & TD
+• 05 - 23 Jan 2027 : Examens semestriels
+• 26 Jan - 02 Fév : Rattrapages
+• 05 Fév : Publication résultats finaux
+
+<strong>📚 ÉVÉNEMENTS IMPORTANTS</strong>
+
+<strong>Orientation & Intégration :</strong>
+• 15 - 17 Jan : Journées d'intégration
+• 18 - 19 Jan : Formation bibliothèque & outils
+• 20 Jan : Cérémonie d'ouverture
+
+<strong>Conférences & Workshops :</strong>
+• Chaque mois : 1 conférence tech avec invités
+• Mars & Oct : Hackathons 48h
+• Avril : Job Fair (recrutement entreprises)
+• Nov : TechFest (projets étudiants)
+
+<strong>Stages & Projets :</strong>
+• Licence : Stage 2 mois en L3 (Juin-Août)
+• Master : Stage 6 mois en M2 (Janv-Juin)
+• Soutenances : Juillet (L3) & Juin (M2)
+
+<strong>🏖️ PÉRIODES DE VACANCES</strong>
+
+• Vacances de Noël : 20 Déc 2025 - 05 Jan 2026
+• Vacances Pâques : 03 - 13 Avril 2026
+• Vacances été : 06 Juil - 15 Août 2026
+• Fêtes légales : selon calendrier national
+
+<strong>⏰ HORAIRES</strong>
+
+<strong>Cours en présentiel :</strong>
+• Lundi - Vendredi : 8h00 - 17h30
+• Samedi (optionnel) : 8h00 - 13h00
+• Pause déjeuner : 12h00 - 14h00
+
+<strong>Bibliothèque :</strong>
+• Lundi - Samedi : 7h30 - 20h00
+• Dimanche : 10h00 - 18h00
+
+<strong>🎯 DATES LIMITES IMPORTANTES</strong>
+
+• ⚠️ 30 Nov 2025 : Fin préinscriptions 1er semestre
+• ⚠️ 05 Jan 2026 : Paiement 1ère tranche
+• ⚠️ 15 Avril 2026 : Paiement 2ème tranche
+• ⚠️ 31 Août 2026 : Dernier délai paiement 1er semestre
+
+<strong>📞 Support pendant les vacances :</strong>
+Notre chatbot reste disponible 24/7 !
+Service administratif : Lun-Ven 9h-16h
+
+Voulez-vous ajouter ces dates à votre calendrier ?`,
+                actions: [
+                    { label: "📥 Télécharger calendrier PDF", query: "download calendrier" },
+                    { label: "🔔 Recevoir rappels SMS", query: "rappels sms" },
+                    { label: "📧 Recevoir rappels Email", query: "rappels email" },
+                    { label: "✍️ Commencer l'inscription", query: "inscription" }
+                ]
+            },
+            inscription: {
+                title: "✍️ Processus de Préinscription",
+                content: `Guide complet pour votre préinscription en ligne :
+
+<strong>🚀 ÉTAPES DU PROCESSUS</strong>
+
+<strong>Étape 1 : Création de compte (5 min)</strong>
+• Renseignez vos informations personnelles
+• Email et numéro de téléphone (vérification obligatoire)
+• Création d'un mot de passe sécurisé
+• Vous recevrez un code d'activation par SMS/Email
+
+<strong>Étape 2 : Choix du programme (2 min)</strong>
+• Sélectionnez votre niveau (Licence/Master)
+• Choisissez votre filière principale
+• Indiquez une filière alternative (optionnel)
+• Précisez votre campus préféré
+
+<strong>Étape 3 : Formulaire de candidature (10 min)</strong>
+• Informations académiques complètes
+• Parcours scolaire et diplômes obtenus
+• Expériences professionnelles (si applicable)
+• Langues parlées et niveau
+• Centres d'intérêt et activités extra-scolaires
+
+<strong>Étape 4 : Upload des documents (15 min)</strong>
+• Téléchargez tous les documents requis
+• Format PDF uniquement, max 2MB/fichier
+• Le système vérifie automatiquement la conformité
+• Barre de progression en temps réel
+
+<strong>Étape 5 : Paiement des frais de dossier (5 min)</strong>
+• Montant : 25,000 FCFA (Licence) / 35,000 FCFA (Master)
+• Paiement par Mobile Money, carte bancaire ou virement
+• Confirmation instantanée
+• Reçu automatique par email
+
+<strong>Étape 6 : Validation et soumission (2 min)</strong>
+• Vérification finale de toutes les informations
+• Relecture du récapitulatif
+• Acceptation des conditions générales
+• Soumission du dossier
+
+<strong>⏱️ DURÉE TOTALE : ~40 minutes</strong>
+
+<strong>✅ APRÈS LA SOUMISSION</strong>
+
+<strong>Confirmation immédiate :</strong>
+• Email de confirmation avec numéro de dossier
+• SMS avec code de suivi
+• Accès à votre espace candidat personnel
+
+<strong>Traitement du dossier (3-5 jours ouvrés) :</strong>
+• Vérification des documents
+• Validation académique
+• Convocation au test d'admission (si requis)
+
+<strong>Test d'admission (si applicable) :</strong>
+• Réception de la convocation 7 jours avant
+• Durée du test : 2h30
+• Résultats sous 48h
+
+<strong>Résultat final :</strong>
+• Notification par email et SMS
+• Lettre d'admission téléchargeable
+• Instructions pour la confirmation
+
+<strong>🎯 CONSEILS POUR RÉUSSIR</strong>
+
+• ✅ Préparez tous vos documents avant de commencer
+• ✅ Utilisez une connexion internet stable
+• ✅ Vérifiez deux fois vos informations
+• ✅ Sauvegardez régulièrement (auto-save activé)
+• ✅ Évitez les heures de pointe (meilleure vitesse)
+
+<strong>📱 BESOIN D'AIDE ?</strong>
+
+• 💬 Chat en direct (ce chatbot !)
+• 📞 Hotline : +237 6XX XXX XXX (Lun-Sam 8h-20h)
+• 📧 Email : admission@ictuniversity.cm
+• 🏢 Bureau des admissions (sur RDV)
+
+<strong>🔐 SÉCURITÉ</strong>
+
+• Toutes vos données sont cryptées
+• Conformité RGPD
+• Accès sécurisé par mot de passe
+• Vérification en 2 étapes disponible
+
+Êtes-vous prêt(e) à commencer votre préinscription maintenant ?`,
+                actions: [
+                    { label: "🚀 Commencer maintenant", query: "start now" },
+                    { label: "📋 Liste documents à préparer", query: "documents" },
+                    { label: "❓ Questions fréquentes", query: "faq" },
+                    { label: "📞 Parler à un conseiller", query: "contact conseiller" }
+                ]
+            },
+            faq: {
+                title: "❓ Questions Fréquemment Posées",
+                content: `Réponses aux questions les plus courantes :
+
+<strong>📚 QUESTIONS ACADÉMIQUES</strong>
+
+<strong>Q : Puis-je changer de filière après l'inscription ?</strong>
+R : Oui, pendant les 2 premières semaines sous conditions. Une réorientation nécessite l'accord du département et des places disponibles.
+
+<strong>Q : Les cours sont-ils en français ou en anglais ?</strong>
+R : Les cours sont bilingues. Le français est la langue principale, mais certains modules techniques sont en anglais. Un niveau B1 en anglais est requis.
+
+<strong>Q : Y a-t-il des cours du soir ?</strong>
+R : Oui, nous proposons un programme "Working Students" avec cours de 18h à 21h (Licence uniquement).
+
+<strong>Q : Quelle est la taille des promotions ?</strong>
+R : Maximum 35 étudiants par classe pour garantir un suivi personnalisé.
+
+<strong>💰 QUESTIONS FINANCIÈRES</strong>
+
+<strong>Q : Puis-je payer en plusieurs fois ?</strong>
+R : Oui, jusqu'à 9 mensualités sans frais supplémentaires.
+
+<strong>Q : Les frais incluent-ils le matériel informatique ?</strong>
+R : Non, mais nous avons des partenariats avec Dell, HP et Lenovo pour des prix étudiants (-30%).
+
+<strong>Q : Comment obtenir une bourse ?</strong>
+R : Les dossiers de bourse sont évalués automatiquement lors de l'inscription. Critères : résultats académiques, situation sociale, et motivation.
+
+<strong>Q : Puis-je travailler en parallèle ?</strong>
+R : Oui, 60% de nos étudiants travaillent à mi-temps. Nous avons un service "Job Board" interne.
+
+<strong>📋 QUESTIONS ADMINISTRATIVES</strong>
+
+<strong>Q : Combien de temps pour traiter mon dossier ?</strong>
+R : 3 à 5 jours ouvrés après soumission complète.
+
+<strong>Q : Que faire si je n'ai pas encore mon diplôme ?</strong>
+R : Vous pouvez soumettre une attestation de réussite. Le diplôme définitif sera exigé avant la rentrée.
+
+<strong>Q : Puis-je m'inscrire si je suis étranger ?</strong>
+R : Absolument ! Nous accueillons des étudiants de toute l'Afrique. Documents supplémentaires : visa étudiant et équivalence MINESUP.
+
+<strong>Q : Mon diplôme étranger est-il reconnu ?</strong>
+R : Les diplômes de la plupart des pays sont acceptés après validation par le MINESUP. Nous vous assistons dans les démarches.
+
+<strong>🏫 VIE ÉTUDIANTE</strong>
+
+<strong>Q : Y a-t-il des résidences universitaires ?</strong>
+R : Oui, 200 places disponibles. Loyer : 50,000 FCFA/mois (chambre partagée) ou 80,000 FCFA (individuelle).
+
+<strong>Q : Comment est la connexion internet ?</strong>
+R : Fibre optique 100 Mbps sur tout le campus, gratuite pour tous les étudiants.
+
+<strong>Q : Y a-t-il une cantine ?</strong>
+R : Oui, repas à partir de 1,500 FCFA. Formules mensuelles disponibles.
+
+<strong>Q : Quelles sont les activités extra-scolaires ?</strong>
+R : Clubs de coding, robotique, cybersécurité, gaming, sport, musique, théâtre et plus encore !
+
+<strong>💼 DÉBOUCHÉS & CARRIÈRE</strong>
+
+<strong>Q : Quel est le taux d'emploi des diplômés ?</strong>
+R : 87% de nos diplômés trouvent un emploi dans les 6 mois. Salaire moyen de départ : 350,000 - 500,000 FCFA.
+
+<strong>Q : Y a-t-il un service d'aide à l'emploi ?</strong>
+R : Oui ! Notre Career Center organise des job fairs, ateliers CV, simulations d'entretien et met en relation avec 150+ entreprises partenaires.
+
+<strong>Q : Peut-on faire des stages à l'étranger ?</strong>
+R : Oui, grâce à nos partenariats avec des universités et entreprises en France, Canada, Sénégal, Rwanda, etc.
+
+Votre question n'est pas listée ? Posez-la moi directement !`,
+                actions: [
+                    { label: "💬 Poser une autre question", query: "autre question" },
+                    { label: "📞 Contact direct", query: "contact" },
+                    { label: "📖 Guide complet", query: "guide etudiant" },
+                    { label: "✍️ Commencer l'inscription", query: "inscription" }
+                ]
+            }
+        };
+
+        // Fonctions utilitaires
+        function getCurrentTime() {
+            return new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+        }
+
+        function scrollToBottom() {
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Fonction pour ajouter un message
+        function addMessage(text, isUser = false, hasActions = false, actions = []) {
+            const messageWrapper = document.createElement('div');
+            messageWrapper.className = `message-wrapper ${isUser ? 'user' : 'bot'}`;
+
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = isUser ? '👤' : '🤖';
+
+            const contentWrapper = document.createElement('div');
+            contentWrapper.className = 'message-content-wrapper';
+
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            bubble.innerHTML = text;
+
+            const time = document.createElement('div');
+            time.className = 'message-time';
+            time.innerHTML = `⏰ ${getCurrentTime()}`;
+
+            contentWrapper.appendChild(bubble);
+            contentWrapper.appendChild(time);
+
+            messageWrapper.appendChild(avatar);
+            messageWrapper.appendChild(contentWrapper);
+
+            chatBody.appendChild(messageWrapper);
+
+            if (hasActions && actions.length > 0) {
+                addActionButtons(actions);
+            }
+
+            scrollToBottom();
+        }
+
+        // Fonction pour ajouter des boutons d'action
+        function addActionButtons(actions) {
+            const actionsContainer = document.createElement('div');
+            actionsContainer.className = 'quick-actions-container';
+
+            actions.forEach(action => {
+                const btn = document.createElement('div');
+                btn.className = 'quick-action-card';
+                btn.innerHTML = `
+                    <span class="quick-action-icon">${action.label.split(' ')[0]}</span>
+                    <span>${action.label.substring(action.label.indexOf(' ') + 1)}</span>
+                `;
+                btn.onclick = () => sendQuickAction(action.query);
+                actionsContainer.appendChild(btn);
+            });
+
+            chatBody.appendChild(actionsContainer);
+            scrollToBottom();
+        }
+
+        // Indicateur de frappe
+        function showTypingIndicator() {
+            if (isTyping) return;
+            isTyping = true;
+
+            const typingWrapper = document.createElement('div');
+            typingWrapper.className = 'message-wrapper bot';
+            typingWrapper.id = 'typing-indicator';
+
+            typingWrapper.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="typing-indicator-wrapper">
+                    <div class="typing-bubble">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            `;
+
+            chatBody.appendChild(typingWrapper);
+            scrollToBottom();
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+            isTyping = false;
+        }
+
+        // Fonction pour obtenir une réponse intelligente
+        function getIntelligentResponse(message) {
+            const lowerMsg = message.toLowerCase();
+
+            // Détection par mots-clés
+            if (lowerMsg.includes('programme') || lowerMsg.includes('filière') || lowerMsg.includes('cours') || lowerMsg.includes('étude')) {
+                return knowledgeBase.programmes;
+            } else if (lowerMsg.includes('admission') || lowerMsg.includes('condition') || lowerMsg.includes('test') || lowerMsg.includes('sélection')) {
+                return knowledgeBase.admission;
+            } else if (lowerMsg.includes('document') || lowerMsg.includes('pièce') || lowerMsg.includes('dossier') || lowerMsg.includes('fournir')) {
+                return knowledgeBase.documents;
+            } else if (lowerMsg.includes('frais') || lowerMsg.includes('coût') || lowerMsg.includes('prix') || lowerMsg.includes('bourse') || lowerMsg.includes('paiement')) {
+                return knowledgeBase.frais;
+            } else if (lowerMsg.includes('date') || lowerMsg.includes('calendrier') || lowerMsg.includes('quand') || lowerMsg.includes('rentrée')) {
+                return knowledgeBase.calendrier;
+            } else if (lowerMsg.includes('inscription') || lowerMsg.includes('inscrire') || lowerMsg.includes('préinscription') || lowerMsg.includes('commencer')) {
+                return knowledgeBase.inscription;
+            } else if (lowerMsg.includes('faq') || lowerMsg.includes('question')) {
+                return knowledgeBase.faq;
+            } else if (lowerMsg.includes('bonjour') || lowerMsg.includes('salut') || lowerMsg.includes('hello') || lowerMsg.includes('hi')) {
+                return {
+                    title: "👋 Bonjour !",
+                    content: "Ravi de vous revoir ! Comment puis-je vous aider aujourd'hui avec votre préinscription ?",
+                    actions: [
+                        { label: "📚 Programmes", query: "programmes" },
+                        { label: "🎯 Admission", query: "admission" },
+                        { label: "💰 Frais", query: "frais" },
+                        { label: "✍️ M'inscrire", query: "inscription" }
+                    ]
+                };
+            } else if (lowerMsg.includes('merci')) {
+                return {
+                    title: "😊 Avec plaisir !",
+                    content: "C'est un plaisir de vous assister ! N'hésitez pas si vous avez d'autres questions. Je suis là pour vous aider à réussir votre inscription. 🎓",
+                    actions: [
+                        { label: "✍️ Commencer l'inscription", query: "inscription" },
+                        { label: "❓ Autre question", query: "autre question" }
+                    ]
+                };
+            } else if (lowerMsg.includes('aide') || lowerMsg.includes('help') || lowerMsg.includes('perdu')) {
+                return {
+                    title: "🆘 Besoin d'aide ?",
+                    content: "Pas de problème, je suis là pour vous guider ! Voici ce que je peux faire pour vous :<br><br>✅ Informations sur les programmes<br>✅ Conditions d'admission<br>✅ Documents requis<br>✅ Frais et bourses<br>✅ Calendrier académique<br>✅ Processus d'inscription<br>✅ Questions fréquentes<br><br>Que souhaitez-vous savoir ?",
+                    actions: [
+                        { label: "📚 Voir programmes", query: "programmes" },
+                        { label: "❓ FAQ", query: "faq" },
+                        { label: "📞 Parler à un humain", query: "contact" }
+                    ]
+                };
+            }
+
+            // Réponse par défaut
+            return {
+                title: "🤔 Je peux vous aider !",
+                content: "Je n'ai pas bien compris votre question, mais je peux vous renseigner sur :<br><br>📚 <strong>Programmes disponibles</strong> (Licence & Master)<br>🎯 <strong>Conditions d'admission</strong> et tests<br>📄 <strong>Documents requis</strong> pour l'inscription<br>💰 <strong>Frais de scolarité</strong> et bourses<br>📅 <strong>Calendrier académique</strong> 2025-2026<br>✍️ <strong>Processus de préinscription</strong> en ligne<br><br>Que souhaitez-vous savoir exactement ?",
+                actions: [
+                    { label: "📚 Programmes", query: "programmes" },
+                    { label: "🎯 Admission", query: "admission" },
+                    { label: "💰 Frais", query: "frais" },
+                    { label: "❓ FAQ", query: "faq" }
+                ]
+            };
+        }
+
+        // Envoyer un message
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message || isTyping) return;
+
+            // Ajouter le message de l'utilisateur
+            addMessage(message, true);
+            conversationHistory.push({ role: 'user', content: message });
+            
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+
+            // Simuler délai de réponse
+            showTypingIndicator();
+
+            setTimeout(() => {
+                removeTypingIndicator();
+                const response = getIntelligentResponse(message);
+                const fullResponse = `<strong>${response.title}</strong><br><br>${response.content}`;
+                addMessage(fullResponse, false, true, response.actions);
+                conversationHistory.push({ role: 'assistant', content: response.content });
+            }, 1500 + Math.random() * 1000);
+        }
+
+        // Actions rapides
+        function sendQuickAction(query) {
+            // Supprimer les boutons d'action précédents
+            document.querySelectorAll('.quick-actions-container').forEach(el => el.remove());
+            
+            addMessage(query, true);
+            
+            showTypingIndicator();
+            
+            setTimeout(() => {
+                removeTypingIndicator();
+                const response = getIntelligentResponse(query);
+                const fullResponse = `<strong>${response.title}</strong><br><br>${response.content}`;
+                addMessage(fullResponse, false, true, response.actions);
+            }, 1500 + Math.random() * 1000);
+        }
+
+        // Suggestions
+        function sendSuggestion(text) {
+            sendQuickAction(text);
+        }
+
+        // Gestion du clavier
+        function handleKeyDown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // Fonctions additionnelles
+        function attachFile() {
+            alert('📎 Fonction de téléchargement de fichiers\n\nCette fonctionnalité sera disponible une fois connecté à votre espace personnel durant le processus d\'inscription.');
+        }
+
+        function toggleVoice() {
+            alert('🎤 Fonction de message vocal\n\nCette fonctionnalité sera disponible prochainement. Restez connecté !');
+        }
+
+        function addEmoji() {
+            const emojis = ['😊', '👍', '❤️', '😄', '🎉', '✨', '💪', '🙏'];
+            const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+            messageInput.value += emoji;
+            messageInput.focus();
+        }
+
+        function startApplication() {
+            sendQuickAction('Je veux commencer mon inscription');
+        }
+
+        // Animation des statistiques
+        function animateStats() {
+            const stats = [
+                { id: 'totalUsers', target: 1247, duration: 2000 },
+                { id: 'onlineUsers', target: 89, duration: 1500 },
+                { id: 'todayApps', target: 156, duration: 1800 }
+            ];
+
+            stats.forEach(stat => {
+                const element = document.getElementById(stat.id);
+                if (!element) return;
+                
+                const increment = stat.target / (stat.duration / 50);
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= stat.target) {
+                        element.textContent = stat.target.toLocaleString();
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(current).toLocaleString();
+                    }
+                }, 50);
+            });
+        }
+
+        // Initialisation
+        window.onload = function() {
+            animateStats();
+            messageInput.focus();
+        };
+
+        // Mise à jour périodique des stats
+        setInterval(() => {
+            const onlineEl = document.getElementById('onlineUsers');
+            if (onlineEl) {
+                const variation = Math.floor(Math.random() * 10) - 5;
+                const current = parseInt(onlineEl.textContent);
+                onlineEl.textContent = Math.max(70, Math.min(100, current + variation));
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
