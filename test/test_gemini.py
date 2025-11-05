@@ -6,8 +6,10 @@ Teste la connexion et génère des réponses d'exemple
 import sys
 import os
 
-# Ajouter le répertoire actuel au path
-sys.path.insert(0, os.path.dirname(__file__))
+# Ajouter le répertoire parent (racine du projet) au path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
 
 from model.gemini_chatbot import generate_response, test_gemini, conversation_context
 

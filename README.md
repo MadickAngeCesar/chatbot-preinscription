@@ -94,7 +94,7 @@ SQLite Database (6 tables)
 ### 1️⃣ Cloner le projet
 
 ```bash
-git clone https://github.com/<ton-utilisateur>/<chatbot-preinscription>.git
+git clone https://github.com/MadickAngeCesar/chatbot-preinscription.git
 cd chatbot-preinscription
 ```
 
@@ -132,7 +132,7 @@ FLASK_ENV=development
 
 **c) Tester Gemini:**
 ```bash
-python test_gemini.py
+python test/test_gemini.py
 ```
 Choisissez l'option **1** pour un test complet.
 
@@ -145,7 +145,7 @@ python init_db.py
 ### 6️⃣ Créer des utilisateurs de test (optionnel)
 
 ```bash
-python create_test_user.py
+python test/create_test_user.py
 ```
 
 Cela créera:
@@ -183,10 +183,13 @@ chatbot-preinscription/
 │   └── auth_api.py            # API Authentification (9 endpoints)
 ├── gemini_chatbot.py          # Module Gemini AI ⭐ NOUVEAU
 ├── gemini_config.py           # Configuration Gemini ⭐ NOUVEAU
-├── test_gemini.py             # Tests Gemini ⭐ NOUVEAU
 ├── init_db.py                 # Initialisation base de données
 ├── migrate_db.py              # Migration base de données
-├── create_test_user.py        # Création utilisateurs test
+│
+├── test/                      # Scripts de tests
+│   ├── test_gemini.py        # Tests Gemini AI ⭐
+│   ├── create_test_user.py   # Création utilisateurs test
+│   └── Chatbot_Preinscription_API.postman_collection.json
 ├── requirements.txt           # Dépendances Python
 ├── .env                       # Variables d'environnement (SECRET)
 │
@@ -488,15 +491,15 @@ CREATE TABLE messages (
 
 ```bash
 # Test complet (conversation simulée)
-python test_gemini.py
+python test/test_gemini.py
 > Choix: 1
 
 # Test détection d'intentions
-python test_gemini.py
+python test/test_gemini.py
 > Choix: 2
 
 # Mode interactif (conversation réelle)
-python test_gemini.py
+python test/test_gemini.py
 > Choix: 4
 ```
 
@@ -567,8 +570,8 @@ MAIL_PASSWORD=votre_mot_de_passe
 - [ ] ✅ Installer dépendances: `pip install -r requirements.txt`
 - [ ] ✅ Configurer `.env` avec variables de production
 - [ ] ✅ Initialiser base de données: `python init_db.py`
-- [ ] ✅ Créer admin: `python create_test_user.py`
-- [ ] ✅ Tester Gemini: `python test_gemini.py`
+- [ ] ✅ Créer admin: `python test/create_test_user.py`
+- [ ] ✅ Tester Gemini: `python test/test_gemini.py`
 - [ ] ✅ Tester API: `curl http://localhost:5000/api/auth/check`
 - [ ] ✅ Vérifier permissions uploads: `chmod 755 uploads/`
 - [ ] ✅ Configurer reverse proxy (Nginx/Apache)
@@ -696,7 +699,7 @@ Ce projet est sous licence **MIT**. Voir le fichier `LICENSE` pour plus de déta
 - ✅ Vérifiez la clé API Gemini dans `.env`
 - ✅ Vérifiez la connexion internet
 - ✅ Consultez les logs Flask
-- ✅ Test: `python test_gemini.py`
+- ✅ Test: `python test/test_gemini.py`
 
 ### ❌ Bouton d'envoi inactif
 - ✅ Videz le cache: Ctrl + Shift + R
