@@ -1,0 +1,61 @@
+---
+title: Request Flow - POST /api/auth/register
+---
+
+sequenceDiagram
+    autonumber
+    
+    actor Client as 👤 Client
+    participant Log as 📝 Logging Middleware
+    participant Valid as ✓ Validation Middleware
+    participant Route as 🚦 auth_routes
+    participant Ctrl as 🎮 auth_controller
+    participant DB as 💾 Database
+    participant Err as ⚠️ Error Handler
+
+    Client->>+Log: POST /api/auth/register<br/>{email, password}
+    
+    Note over Log: Log request info<br/>IP, timestamp, body
+    Log->>+Valid: Continue
+    
+    Note over Valid: Check Content-Type<br/>Check request size
+    Valid->>+Route: Continue
+    
+    Note over Route: @validate_json<br/>('email', 'password')
+    Route->>Route: Check required fields
+    
+    alt Fields missing
+        Route-->>Client: 400 Bad Request<br/>{error: "Missing fields"}
+    else Fields present
+        Route->>+Ctrl: register_user()
+        
+        Note over Ctrl: Extract data<br/>Validate email format<br/>Validate password strength
+        
+        alt Validation fails
+            Ctrl-->>Route: ValidationError
+            Route-->>Err: Handle error
+            Err-->>Client: 400 Bad Request<br/>{error: "Invalid data"}
+        else Validation OK
+            Ctrl->>+DB: Check if email exists
+            DB-->>-Ctrl: Result
+            
+            alt Email exists
+                Ctrl-->>Route: ValidationError
+                Route-->>Err: Handle error
+                Err-->>Client: 409 Conflict<br/>{error: "Email exists"}
+            else Email available
+                Ctrl->>Ctrl: Hash password (SHA-256)
+                Ctrl->>+DB: INSERT INTO users
+                DB-->>-Ctrl: User created (ID: 123)
+                Ctrl->>Ctrl: Create session
+                Ctrl->>Ctrl: log_user_action('REGISTER')
+                
+                Ctrl-->>-Route: {success: true, user: {...}}, 201
+                Route-->>-Valid: JSON Response
+                Valid-->>-Log: Response
+                
+                Note over Log: Log response<br/>Status: 201<br/>Time: 45ms
+                Log-->>-Client: 201 Created<br/>{success: true, user: {...}}
+            end
+        end
+    end

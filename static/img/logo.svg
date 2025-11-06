@@ -1,0 +1,71 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dégradé principal (violet) -->
+  <defs>
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Dégradé secondaire (vert) -->
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Ombre -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+      <feOffset dx="0" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Cercle de fond avec ombre -->
+  <circle cx="100" cy="100" r="90" fill="url(#mainGradient)" filter="url(#shadow)"/>
+  
+  <!-- Toque de graduation (chapeau) -->
+  <g transform="translate(100, 75)">
+    <!-- Base du chapeau -->
+    <ellipse cx="0" cy="10" rx="45" ry="8" fill="#fff" opacity="0.9"/>
+    
+    <!-- Sommet du chapeau -->
+    <path d="M -35,10 L -30,-5 L 30,-5 L 35,10 Z" fill="#fff" opacity="0.95"/>
+    
+    <!-- Carré sur le dessus -->
+    <rect x="-25" y="-15" width="50" height="4" fill="#fff" opacity="0.95"/>
+    
+    <!-- Pompon -->
+    <circle cx="0" cy="-17" r="3" fill="url(#accentGradient)"/>
+    
+    <!-- Cordon du pompon -->
+    <line x1="0" y1="-14" x2="0" y2="-5" stroke="#fff" stroke-width="1.5" opacity="0.8"/>
+  </g>
+  
+  <!-- Bulles de chat (représentant le chatbot) -->
+  <g transform="translate(100, 130)">
+    <!-- Grande bulle -->
+    <path d="M -35,-10 Q -35,-25 -20,-25 L 20,-25 Q 35,-25 35,-10 L 35,5 Q 35,20 20,20 L -10,20 L -20,28 L -18,20 L -20,20 Q -35,20 -35,5 Z" 
+          fill="#fff" opacity="0.95"/>
+    
+    <!-- Points de conversation -->
+    <circle cx="-18" cy="-5" r="3" fill="url(#accentGradient)"/>
+    <circle cx="0" cy="-5" r="3" fill="url(#accentGradient)"/>
+    <circle cx="18" cy="-5" r="3" fill="url(#accentGradient)"/>
+    
+    <!-- Petite bulle (accent) -->
+    <circle cx="55" cy="0" r="6" fill="#fff" opacity="0.8"/>
+    <circle cx="65" cy="-5" r="4" fill="#fff" opacity="0.7"/>
+  </g>
+  
+  <!-- Icône utilisateur/étudiant (silhouette) -->
+  <g transform="translate(60, 105)" opacity="0.3">
+    <circle cx="0" cy="0" r="8" fill="#fff"/>
+    <path d="M -12,15 Q -12,8 -6,8 L 6,8 Q 12,8 12,15 L 12,20 L -12,20 Z" fill="#fff"/>
+  </g>
+</svg>

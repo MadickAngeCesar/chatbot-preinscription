@@ -2,8 +2,7 @@
 Flask==3.0.0
 Flask-CORS==4.0.0
 
-# Base de données
-sqlite3
+# Base de données (SQLite est inclus avec Python)
 
 # Requêtes HTTP (pour les tests)
 requests==2.31.0
@@ -11,8 +10,14 @@ requests==2.31.0
 # Sécurité et utilitaires
 Werkzeug==3.0.1
 
-# Pour le développement (optionnel)
+# Variables d'environnement
 python-dotenv==1.0.0
 
 # Google Gemini AI
 google-generativeai==0.3.2
+
+# Utilitaires supplémentaires
+# (Ajoutés pour la nouvelle architecture)
+
+# NOTE: Pour installer toutes les dépendances
+# pip install -r requirements.txt

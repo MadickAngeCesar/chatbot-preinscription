@@ -1,34 +1,80 @@
+---
+title: Architecture MVC + Controllers - Chatbot Préinscription
+---
+
 flowchart TB
-    subgraph Client["🌐 Client (Navigateur Web)"]
-        UI["Interface HTML/CSS/JS<br/>(index.html, chat.html, preinscription.html)"]
-        JS["JavaScript Client<br/>(script.js - AJAX)"]
+    subgraph Client["👤 CLIENT (Browser/App)"]
+        Browser[Web Browser]
+        API[API Client]
     end
-    
-    subgraph Server["⚙️ Serveur Flask (Backend)"]
-        direction TB
-        App["app.py<br/>Routes & Endpoints"]
-        API["API REST<br/>(POST /api/message, POST /api/preinscription)"]
+
+    subgraph FlaskApp["🚀 FLASK APPLICATION"]
+        
+        subgraph Middlewares["🛡️ MIDDLEWARES"]
+            direction TB
+            Log[Logging Middleware<br/>📝 Log requests/responses]
+            Auth[Auth Middleware<br/>🔐 Check session validity]
+            Valid[Validation Middleware<br/>✓ Validate data]
+        end
+
+        subgraph Routes["🚦 ROUTES (HTTP Layer)"]
+            direction LR
+            AuthRoutes[auth_routes.py<br/>/api/auth/*]
+            APIRoutes[api_routes.py<br/>/api/*]
+        end
+
+        subgraph Controllers["🎮 CONTROLLERS (Business Logic)"]
+            direction TB
+            AuthCtrl[auth_controller<br/>register, login, profile]
+            ChatCtrl[chat_controller<br/>send_message, history]
+            PreinsCtrl[preinscription_controller<br/>create, get, update]
+            EtabCtrl[etablissement_controller<br/>get, details, stats]
+            FilCtrl[filiere_controller<br/>get, details, by_niveau]
+        end
+
+        subgraph ServicesModels["🔧 SERVICES & MODELS"]
+            direction LR
+            DB[(Database<br/>SQLite)]
+            Gemini[Gemini AI<br/>Chatbot]
+            Files[File Storage<br/>uploads/]
+        end
+
+        subgraph ErrorHandling["⚠️ ERROR HANDLERS"]
+            ErrHandler[Error Handler<br/>APIError, 404, 500]
+        end
     end
+
+    Browser --> Log
+    API --> Log
     
-    subgraph Model["🧠 Module IA"]
-        ChatModel["chatbot_model.py<br/>(respond function)"]
-        NLP["nlp_utils.py<br/>(prétraitement NLP)"]
-    end
+    Log --> Auth
+    Auth --> Valid
+    Valid --> Routes
     
-    subgraph Database["💾 Base de données"]
-        SQLite[("SQLite<br/>chatbot.db")]
-        Tables["Tables:<br/>- preinscriptions<br/>- messages<br/>- users (optionnel)"]
-    end
+    AuthRoutes --> AuthCtrl
+    APIRoutes --> ChatCtrl
+    APIRoutes --> PreinsCtrl
+    APIRoutes --> EtabCtrl
+    APIRoutes --> FilCtrl
     
-    UI --> JS
-    JS -->|"Requêtes HTTP (JSON)"| API
-    API --> App
-    App -->|"Appelle model.respond()"| ChatModel
-    ChatModel --> NLP
-    App -->|"Insère/Lit données"| SQLite
-    SQLite -.->|"Schéma"| Tables
+    AuthCtrl --> DB
+    ChatCtrl --> DB
+    ChatCtrl --> Gemini
+    PreinsCtrl --> DB
+    PreinsCtrl --> Files
+    EtabCtrl --> DB
+    FilCtrl --> DB
     
-    style Client fill:#a5d6ff,stroke:#0047ab,stroke-width:3px
-    style Server fill:#ffb84d,stroke:#d84315,stroke-width:3px
-    style Model fill:#d1a3ff,stroke:#6a0dad,stroke-width:3px
-    style Database fill:#90ee90,stroke:#006400,stroke-width:3px
+    Controllers --> ErrHandler
+    ErrHandler --> Client
+    
+    ServicesModels --> Routes
+    Routes --> Client
+
+    style FlaskApp fill:#667eea,stroke:#764ba2,stroke-width:3px,color:#fff
+    style Middlewares fill:#10b981,stroke:#059669,stroke-width:2px,color:#fff
+    style Routes fill:#f59e0b,stroke:#d97706,stroke-width:2px,color:#fff
+    style Controllers fill:#8b5cf6,stroke:#7c3aed,stroke-width:2px,color:#fff
+    style ServicesModels fill:#06b6d4,stroke:#0891b2,stroke-width:2px,color:#fff
+    style ErrorHandling fill:#ef4444,stroke:#dc2626,stroke-width:2px,color:#fff
+    style Client fill:#6366f1,stroke:#4f46e5,stroke-width:2px,color:#fff

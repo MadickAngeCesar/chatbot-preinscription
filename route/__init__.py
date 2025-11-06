@@ -1,0 +1,8 @@
+"""
+Package route - Définit les routes HTTP de l'application
+"""
+
+from .auth_routes import auth_bp
+from .api_routes import api_bp
+
+__all__ = ['auth_bp', 'api_bp']

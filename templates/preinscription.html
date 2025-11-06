@@ -10,32 +10,49 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="form-page">
-    <!-- Navigation -->
-    <nav class="navbar navbar-transparent">
-        <div class="container">
-            <div class="nav-content">
-                <a href="{{ url_for('index') }}" class="logo">
+<body>
+    <div class="app-container">
+        <!-- SIDEBAR GAUCHE -->
+        <aside class="sidebar-left">
+            <div class="sidebar-header">
+                <div class="university-logo">
                     <i class="fas fa-graduation-cap"></i>
-                    <span>ICT University</span>
-                </a>
-                <div class="nav-actions">
-                    <a href="{{ url_for('chat') }}" class="btn btn-outline-primary">
-                        <i class="fas fa-comments"></i> Chatbot
-                    </a>
-                    <a href="/profile" class="btn btn-outline-secondary">
-                        <i class="fas fa-user"></i> Profil
-                    </a>
-                    <button onclick="logout()" class="btn btn-outline-secondary">
-                        <i class="fas fa-sign-out-alt"></i> Déconnexion
-                    </button>
                 </div>
+                <h1 class="university-name">ICT University</h1>
+                <p class="university-tagline">Excellence & Innovation</p>
             </div>
-        </div>
-    </nav>
 
-    <!-- Form Container -->
-    <div class="form-container">
+            <nav class="nav-menu">
+                <a href="{{ url_for('chat') }}" class="nav-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Conversation</span>
+                </a>
+                <a href="{{ url_for('preinscription') }}" class="nav-item active">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Préinscription</span>
+                </a>
+                <a href="{{ url_for('profile') }}" class="nav-item">
+                    <i class="fas fa-user"></i>
+                    <span>Mon Profil</span>
+                </a>
+                <a href="{{ url_for('index') }}" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Déconnexion</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- CONTENU PRINCIPAL -->
+        <main class="main-content">
+            <!-- Form Container -->
+            <div class="form-container">
         <div class="form-wrapper">
             <!-- Form Header -->
             <div class="form-header">
@@ -456,5 +473,7 @@
             initializeForm();
         });
     </script>
+        </main>
+    </div>
 </body>
 </html>

@@ -165,7 +165,7 @@
             </a>
             
             {% if 'user_id' in session %}
-                <a href="{{ url_for('logout') }}" class="btn btn-secondary">
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary">
                     <i class="fas fa-sign-out-alt"></i>
                     Se déconnecter
                 </a>

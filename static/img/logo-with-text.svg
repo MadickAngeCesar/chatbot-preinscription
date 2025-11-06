@@ -1,0 +1,65 @@
+<svg width="400" height="120" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dégradés -->
+  <defs>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <filter id="shadowLogo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="3" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.25"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Cercle du logo -->
+  <circle cx="60" cy="60" r="50" fill="url(#logoGrad)" filter="url(#shadowLogo)"/>
+  
+  <!-- Toque de graduation -->
+  <g transform="translate(60, 45)">
+    <ellipse cx="0" cy="5" rx="25" ry="4.5" fill="#fff" opacity="0.9"/>
+    <path d="M -19,5 L -17,-3 L 17,-3 L 19,5 Z" fill="#fff" opacity="0.95"/>
+    <rect x="-14" y="-8" width="28" height="2.5" fill="#fff" opacity="0.95"/>
+    <circle cx="0" cy="-10" r="2" fill="url(#accentGrad)"/>
+    <line x1="0" y1="-8" x2="0" y2="-3" stroke="#fff" stroke-width="1" opacity="0.8"/>
+  </g>
+  
+  <!-- Bulle de chat -->
+  <g transform="translate(60, 75)">
+    <path d="M -19,-5 Q -19,-14 -11,-14 L 11,-14 Q 19,-14 19,-5 L 19,3 Q 19,11 11,11 L -5,11 L -11,16 L -10,11 L -11,11 Q -19,11 -19,3 Z" 
+          fill="#fff" opacity="0.95"/>
+    <circle cx="-10" cy="-3" r="2" fill="url(#accentGrad)"/>
+    <circle cx="0" cy="-3" r="2" fill="url(#accentGrad)"/>
+    <circle cx="10" cy="-3" r="2" fill="url(#accentGrad)"/>
+  </g>
+  
+  <!-- Texte "ICT ChatBot" -->
+  <text x="130" y="50" font-family="'Inter', 'Segoe UI', Arial, sans-serif" font-size="28" font-weight="700" fill="#2d3748">
+    ICT ChatBot
+  </text>
+  
+  <!-- Sous-titre "Préinscription" -->
+  <text x="130" y="75" font-family="'Inter', 'Segoe UI', Arial, sans-serif" font-size="16" font-weight="500" fill="url(#accentGrad)">
+    Préinscription Universitaire
+  </text>
+  
+  <!-- Badge "AI Powered" -->
+  <g transform="translate(130, 90)">
+    <rect x="0" y="0" width="90" height="20" rx="10" fill="url(#logoGrad)" opacity="0.15"/>
+    <text x="12" y="14" font-family="'Inter', 'Segoe UI', Arial, sans-serif" font-size="11" font-weight="600" fill="#667eea">
+      ⚡ AI Powered
+    </text>
+  </g>
+</svg>

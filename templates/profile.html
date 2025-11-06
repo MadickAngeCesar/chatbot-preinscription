@@ -3,116 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Profil - Chatbot Préinscription</title>
+    <title>Mon Profil - ICT University</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background: #f5f7fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         .profile-container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
+            max-width: 100%;
+            margin: 0;
+            padding: 40px;
+            background: transparent;
+            min-height: 100vh;
         }
 
         .profile-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: white;
+            color: #1f2937;
+            padding: 48px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
         }
 
         .profile-header-content {
             display: flex;
             align-items: center;
-            gap: 30px;
+            gap: 32px;
         }
 
         .profile-avatar {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            background: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 48px;
-            color: #667eea;
-            font-weight: 700;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-size: 36px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
         }
 
         .profile-info h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1f2937;
         }
 
         .profile-info p {
-            font-size: 16px;
-            opacity: 0.9;
-            margin: 5px 0;
+            font-size: 14px;
+            color: #6b7280;
+            margin: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-info p i {
+            color: #9ca3af;
+            font-size: 13px;
         }
 
         .profile-badge {
             display: inline-block;
-            padding: 5px 15px;
-            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            background: #f3f4f6;
             border-radius: 20px;
-            font-size: 14px;
-            margin-top: 10px;
+            font-size: 13px;
+            margin-top: 12px;
+            color: #4b5563;
+            font-weight: 500;
         }
 
         .profile-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
         }
 
         .profile-card {
             background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s ease;
+        }
+
+        .profile-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
         .profile-card h2 {
-            font-size: 20px;
-            color: #333;
-            margin-bottom: 20px;
+            font-size: 18px;
+            color: #1f2937;
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            font-weight: 600;
         }
 
         .profile-card h2 i {
             color: #667eea;
+            font-size: 20px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .form-group label {
             display: block;
-            font-weight: 600;
-            color: #555;
+            font-weight: 500;
+            color: #374151;
             margin-bottom: 8px;
             font-size: 14px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
             border-radius: 8px;
-            font-size: 15px;
-            transition: all 0.3s ease;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            background: #ffffff;
         }
 
         .form-group input:focus {
@@ -122,176 +144,164 @@
         }
 
         .form-group input:disabled {
-            background: #f5f5f5;
+            background: #f9fafb;
             cursor: not-allowed;
+            color: #9ca3af;
         }
 
         .btn {
-            padding: 12px 30px;
+            padding: 12px 24px;
             border: none;
             border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             gap: 8px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #667eea;
             color: white;
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            background: #5558dd;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
         .btn-secondary {
-            background: #f5f5f5;
-            color: #555;
+            background: #f3f4f6;
+            color: #4b5563;
         }
 
         .btn-secondary:hover {
-            background: #e8e8e8;
+            background: #e5e7eb;
         }
 
         .btn-danger {
-            background: #f44336;
+            background: #ef4444;
             color: white;
         }
 
         .btn-danger:hover {
-            background: #d32f2f;
-            transform: translateY(-2px);
+            background: #dc2626;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
+            background: #f9fafb;
+            color: #1f2937;
+            padding: 24px;
+            border-radius: 12px;
             text-align: center;
+            border: 1px solid #e5e7eb;
         }
 
         .stat-value {
             font-size: 32px;
             font-weight: 700;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            color: #667eea;
         }
 
         .stat-label {
-            font-size: 14px;
-            opacity: 0.9;
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 500;
         }
 
         .preinscriptions-list {
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
         }
 
+        .preinscriptions-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .preinscriptions-list::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 3px;
+        }
+
         .preinscription-item {
-            padding: 15px;
-            border-left: 4px solid #667eea;
-            background: #f9f9f9;
-            margin-bottom: 15px;
+            padding: 20px;
+            border-left: 3px solid #667eea;
+            background: #f9fafb;
+            margin-bottom: 12px;
             border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .preinscription-item:hover {
+            background: #f3f4f6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .preinscription-item h3 {
-            font-size: 16px;
-            color: #333;
+            font-size: 15px;
+            color: #1f2937;
             margin-bottom: 8px;
+            font-weight: 600;
         }
 
         .preinscription-item p {
-            font-size: 14px;
-            color: #777;
-            margin: 3px 0;
+            font-size: 13px;
+            color: #6b7280;
+            margin: 4px 0;
         }
 
         .status-badge {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
+            padding: 5px 14px;
+            border-radius: 12px;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 500;
         }
 
-        .status-nouveau { background: #2196F3; color: white; }
-        .status-en_cours { background: #FF9800; color: white; }
-        .status-validé { background: #4CAF50; color: white; }
-        .status-rejeté { background: #F44336; color: white; }
+        .status-nouveau { background: #dbeafe; color: #1e40af; }
+        .status-en_cours { background: #fef3c7; color: #92400e; }
+        .status-validé { background: #d1fae5; color: #065f46; }
+        .status-rejeté { background: #fee2e2; color: #991b1b; }
 
         .alert {
-            padding: 15px 20px;
+            padding: 16px 20px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             display: none;
+            font-size: 14px;
         }
 
         .alert-success {
-            background: #d4edda;
-            border-left: 4px solid #28a745;
-            color: #155724;
+            background: #d1fae5;
+            border-left: 3px solid #10b981;
+            color: #065f46;
         }
 
         .alert-error {
-            background: #f8d7da;
-            border-left: 4px solid #dc3545;
-            color: #721c24;
-        }
-
-        .navbar {
-            background: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .navbar-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .navbar-brand {
-            font-size: 24px;
-            font-weight: 700;
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .navbar-menu {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .navbar-menu a {
-            color: #555;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .navbar-menu a:hover {
-            color: #667eea;
+            background: #fee2e2;
+            border-left: 3px solid #ef4444;
+            color: #991b1b;
         }
 
         @media (max-width: 768px) {
+            .profile-container {
+                padding: 20px;
+            }
+
+            .profile-header {
+                padding: 32px 24px;
+            }
+
             .profile-header-content {
                 flex-direction: column;
                 text-align: center;
@@ -304,26 +314,55 @@
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .profile-card {
+                padding: 24px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar-content">
-            <a href="{{ url_for('index') }}" class="navbar-brand">
-                <i class="fas fa-graduation-cap"></i> Préinscription
-            </a>
-            <div class="navbar-menu">
-                <a href="{{ url_for('chat') }}"><i class="fas fa-comments"></i> Chatbot</a>
-                <a href="{{ url_for('preinscription') }}"><i class="fas fa-file-alt"></i> Préinscription</a>
-                <a href="{{ url_for('profile') }}" class="active"><i class="fas fa-user"></i> Profil</a>
-                <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+    <div class="app-container">
+        <!-- SIDEBAR GAUCHE -->
+        <aside class="sidebar-left">
+            <div class="sidebar-header">
+                <div class="university-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h1 class="university-name">ICT University</h1>
+                <p class="university-tagline">Excellence & Innovation</p>
             </div>
-        </div>
-    </nav>
 
-    <div class="profile-container">
+            <nav class="nav-menu">
+                <a href="{{ url_for('chat') }}" class="nav-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Conversation</span>
+                </a>
+                <a href="{{ url_for('preinscription') }}" class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Préinscription</span>
+                </a>
+                <a href="{{ url_for('profile') }}" class="nav-item active">
+                    <i class="fas fa-user"></i>
+                    <span>Mon Profil</span>
+                </a>
+                <a href="{{ url_for('index') }}" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Déconnexion</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- CONTENU PRINCIPAL -->
+        <main class="main-content">
+            <div class="profile-container">
         <!-- Alert -->
         <div id="alert" class="alert"></div>
 
@@ -633,5 +672,8 @@
             });
         }
     </script>
+            </div>
+        </main>
+    </div>
 </body>
 </html>
