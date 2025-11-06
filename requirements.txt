@@ -19,5 +19,8 @@ google-generativeai==0.3.2
 # Utilitaires supplémentaires
 # (Ajoutés pour la nouvelle architecture)
 
+# Production WSGI server
+gunicorn==20.1.0
+
 # NOTE: Pour installer toutes les dépendances
 # pip install -r requirements.txt

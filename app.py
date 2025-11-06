@@ -29,7 +29,8 @@ from route import auth_bp, api_bp
 app = Flask(__name__)
 
 # Configuration de base
-app.secret_key = secrets.token_hex(32)
+# Prefer a fixed secret in production provided via env var. Fall back to generated token for dev.
+app.secret_key = os.environ.get('SECRET_KEY') or secrets.token_hex(32)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5MB max
 app.config['ALLOWED_EXTENSIONS'] = {'pdf', 'jpg', 'jpeg', 'png'}
@@ -350,4 +351,4 @@ if __name__ == '__main__':
     print("="*60)
     print("\n✨ Application prête ! Architecture MVC avec Controllers\n")
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=5000)
