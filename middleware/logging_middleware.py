@@ -8,13 +8,20 @@ from datetime import datetime
 import logging
 import json
 import time
+import os
+
+# Ensure logs directory exists (use project root so relative runs and deployed runs work)
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+os.makedirs(LOG_DIR, exist_ok=True)
+LOG_FILE = os.path.join(LOG_DIR, 'app.log')
 
 # Configuration du logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('logs/app.log'),
+        logging.FileHandler(LOG_FILE),
         logging.StreamHandler()
     ]
 )
