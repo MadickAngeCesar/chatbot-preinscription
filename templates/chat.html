@@ -16,10 +16,10 @@
         <aside class="sidebar-left">
             <div class="sidebar-header">
                 <div class="university-logo">
-                    <i class="fas fa-graduation-cap"></i>
+                    <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="ICT University" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='flex'" />
+                    <i class="fas fa-graduation-cap fallback-icon" aria-hidden="true" style="display:none"></i>
                 </div>
                 <h1 class="university-name">ICT University</h1>
-                <p class="university-tagline">Excellence & Innovation</p>
             </div>
 
             <nav class="nav-menu">
@@ -35,10 +35,7 @@
                     <i class="fas fa-user"></i>
                     <span>Mon Profil</span>
                 </a>
-                <a href="{{ url_for('index') }}" class="nav-item">
-                    <i class="fas fa-home"></i>
-                    <span>Accueil</span>
-                </a>
+                <!-- Home link removed per design -->
             </nav>
 
             <div class="sidebar-footer">
@@ -56,10 +53,6 @@
                 <div class="chat-header-content">
                     <div class="chat-header-info">
                         <h2>Assistant Virtuel</h2>
-                        <p class="chat-header-subtitle">
-                            <span class="status-indicator"></span>
-                            En ligne
-                        </p>
                     </div>
                 </div>
             </header>

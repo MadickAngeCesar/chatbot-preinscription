@@ -1026,6 +1026,35 @@ input, textarea, select {
     box-shadow: 0 6px 16px rgba(102, 126, 234, 0.25);
 }
 
+/* Allow using an image logo that overlays the fallback icon.
+   If the image fails to load it will be hidden via onerror and the
+   fallback icon will remain visible. */
+.university-logo {
+    position: relative;
+    overflow: hidden;
+}
+
+.university-logo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 14px;
+    display: block;
+    z-index: 2;
+}
+
+.university-logo .fallback-icon {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
 .university-name {
     font-size: 1.125rem;
     font-weight: 600;
@@ -1352,8 +1381,12 @@ input, textarea, select {
 
 /* Message Wrapper */
 .message-wrapper {
+    /* Switch messages to horizontal layout: bubble + timestamp on one row */
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 8px;
     margin-bottom: 20px;
     animation: messageSlide 0.2s ease;
 }
@@ -1370,11 +1403,13 @@ input, textarea, select {
 }
 
 .message-wrapper.user {
-    align-items: flex-end;
+    /* user messages align to the right */
+    justify-content: flex-end;
 }
 
 .message-wrapper.bot {
-    align-items: flex-start;
+    /* bot messages align to the left */
+    justify-content: flex-start;
 }
 
 .message-avatar {
@@ -1383,7 +1418,8 @@ input, textarea, select {
 
 .message-content-wrapper {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 8px;
     max-width: 70%;
 }
 
@@ -1392,6 +1428,7 @@ input, textarea, select {
     border-radius: 16px;
     line-height: 1.5;
     font-size: 0.9375rem;
+    display: inline-block;
 }
 
 .message-wrapper.bot .message-bubble {
@@ -1430,12 +1467,20 @@ input, textarea, select {
 .message-time {
     font-size: 0.75rem;
     color: var(--text-secondary);
-    margin-top: var(--spacing-xs);
+    margin: 0;
     padding: 0 var(--spacing-sm);
+    white-space: nowrap;
+    align-self: flex-end;
 }
 
+/* For bot messages: timestamp to the right of the bubble */
+.message-wrapper.bot .message-time {
+    margin-left: 6px;
+}
+
+/* For user messages: timestamp to the left of the bubble when right-aligned */
 .message-wrapper.user .message-time {
-    text-align: right;
+    margin-right: 6px;
 }
 
 .message-actions {
@@ -2376,6 +2421,9 @@ input, textarea, select {
 
 .message-content {
     max-width: 70%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .message-bubble {
@@ -2401,12 +2449,20 @@ input, textarea, select {
 .message-time {
     font-size: var(--font-size-xs);
     color: var(--text-tertiary);
-    margin-top: var(--spacing-xs);
+    margin: 0;
     padding: 0 var(--spacing-sm);
+    white-space: nowrap;
+    align-self: flex-end;
 }
 
+/* bot: timestamp to the right of the bubble */
+.chat-message.bot .message-time {
+    margin-left: 6px;
+}
+
+/* user: timestamp to the left of bubble when row-reverse */
 .chat-message.user .message-time {
-    text-align: right;
+    margin-right: 6px;
 }
 
 /* Chat Input */
